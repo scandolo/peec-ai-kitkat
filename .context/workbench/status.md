@@ -4,7 +4,7 @@ Last updated: 2026-04-26 (orchestrator)
 
 ## Current state
 
-Cleanup complete. v2 parallel-agent work (UI polish, live APIs + snapshot, curated demo data) landed on `main` at commit `4684bff`. Workbench bootstrapped for v3. Four parallel chats are dispatched (or pending dispatch) — see `dispatch-prompts.md` and `agents/*.md` for each chat's backlog.
+`frontend-inbox` merged to `main` at `6c644d4` (typecheck clean). Sidebar + ranked Inbox + TaskDrawer + react-router routing now live. Source-URL invariant honored (TaskDrawer top-right open-source button → `task.source_url` in new tab). Pre-existing `import.meta.env` errors in `services/{peec,gemini,tavily}.ts` were already on main before this merge — flagged for `live-apis` follow-up, not blocking.
 
 ## Active workstreams
 
@@ -12,7 +12,7 @@ Cleanup complete. v2 parallel-agent work (UI polish, live APIs + snapshot, curat
 |---------------------|-----------|----------|-----------------------------------------------|----------------------------------|
 | `agent-arch`        | this chat | orchestrator | all                                       | (merges others; resolves locks)  |
 | `backend-supabase`  | claude-bs | **MERGED** at 8af2a2b. Migrations applied via Supabase MCP, RLS on, tables empty pending seed. | full-plan.md, agents/backend-supabase.md      | (unblocks edge-functions, frontend-inbox)   |
-| `frontend-inbox`    | TBD       | pending  | full-plan.md, peec-references/, agents/…      | deploy-and-glue                  |
+| `frontend-inbox`    | claude-fi | **MERGED** at 6c644d4. Sidebar + Inbox feed + TaskDrawer + router. Lovable will auto-deploy. | full-plan.md, peec-references/, agents/…      | (unblocks deploy-and-glue)       |
 | `edge-functions`    | TBD       | pending  | full-plan.md (Edge fns section), schema       | deploy-and-glue                  |
 | `deploy-and-glue`   | TBD       | pending  | full-plan.md, all above                       | (final — auth + onboarding code only; Lovable handles deploy) |
 
