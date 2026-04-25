@@ -1,40 +1,55 @@
-import type { ConversationOpportunity, Trend, VisibilityGap, VoiceProfile } from '../types';
+/**
+ * Discovery — the thin orchestrator over the three SWARM agents.
+ *
+ *  1. Pulls strategic intelligence from Peec (brands / topics / gaps / domains).
+ *  2. Builds the Brand Context RAG index (used to ground every reply).
+ *  3. Extracts the brand voice (system-prompt anchor for every Gemini call).
+ *  4. Fans out to the Trends and Conversation Interception agents in parallel.
+ *  5. Composes a RadarSnapshot for the UI to render.
+ *
+ * Snapshot-default — services hydrate from `src/data/snapshot.json` instantly
+ * unless `force: true` is passed, in which case they refresh from live APIs.
+ */
+
+import type {
+  AgentRunOptions,
+  BrandContextIndex,
+  ConversationOpportunity,
+  Trend,
+  VisibilityGap,
+  VoiceProfile,
+} from '../types';
 import {
   ATTIO_BRAND_ID,
   brandReportOverall,
   listBrands,
   topCitedDomains,
   visibilityGaps,
+  type PeecBrandReportRow,
+  type PeecDomainReportRow,
 } from './peec';
-import {
-  extractVoice,
-  generateQueries,
-  scoreResults,
-  summarizeTrends,
-} from './gemini';
-import { tavilySearch, tavilySearchMulti } from './tavily';
+import { extractVoice } from './gemini';
+import { buildAttioContextIndex, runInterceptionAgent, runTrendsAgent } from '../agents';
 
 export interface RadarSnapshot {
   brand: { name: string; domain: string; competitors: string[]; brandId: string };
-  overall: Awaited<ReturnType<typeof brandReportOverall>>;
+  overall: PeecBrandReportRow[];
   gaps: VisibilityGap[];
-  topDomains: Awaited<ReturnType<typeof topCitedDomains>>;
+  topDomains: PeecDomainReportRow[];
   voice: VoiceProfile;
+  contextIndex: BrandContextIndex;
   trends: Trend[];
   opportunities: ConversationOpportunity[];
 }
 
-/**
- * Build the full Radar state for a brand. Used both:
- *  - offline (pre-compute and serialize to data/attio-cache.json), and
- *  - live (called from the UI when keys are present).
- *
- * Each section degrades gracefully — missing keys → mocks.
- */
-export async function buildRadar(opts: { brandId?: string } = {}): Promise<RadarSnapshot> {
+export async function buildRadar(
+  opts: AgentRunOptions & { brandId?: string } = {},
+): Promise<RadarSnapshot> {
   const brandId = opts.brandId ?? ATTIO_BRAND_ID;
 
-  // 1. Strategic intelligence (Peec)
+  // 1. Strategic intelligence (Peec).
+  // Note: services own their own snapshot/live decision today. When `live-apis`
+  // lands `FetchOpts.force`, thread `opts.force` through here.
   const [brands, overall, topDomains, gaps] = await Promise.all([
     listBrands(),
     brandReportOverall(),
@@ -46,103 +61,25 @@ export async function buildRadar(opts: { brandId?: string } = {}): Promise<Radar
   const competitors = brands.filter((b) => b.id !== brandId).map((b) => b.name);
   const brand = {
     name: own?.name ?? 'Attio',
-    domain: own?.domain ?? 'attio.com',
+    domain: own?.domains?.[0] ?? 'attio.com',
     competitors,
     brandId,
   };
 
-  // 2. Brand voice + context (Gemini, optional corpus)
-  const voiceCorpus: Array<{ source: string; text: string }> = [];
-  const voice = await extractVoice({ name: brand.name, domain: brand.domain }, voiceCorpus);
+  // 2. Brand Context RAG (hardcoded for the demo; future: ingest via Tavily extract)
+  const contextIndex = buildAttioContextIndex();
 
-  // 3. Conversation interception
-  const sortedGaps = [...gaps].sort((a, b) => a.visibility - b.visibility).slice(0, 4);
-  const queries = await generateQueries(
-    { name: brand.name, domain: brand.domain, competitors },
-    sortedGaps,
+  // 3. Voice profile (system-prompt anchor for every Gemini call)
+  const voice = await extractVoice(
+    { name: brand.name, domain: brand.domain },
+    contextIndex.chunks.slice(0, 5).map((c) => ({ source: c.source, text: c.text })),
   );
 
-  const tavilyResults = await tavilySearchMulti(
-    queries.map((q) => ({ query: q.query, platform: q.platform })),
-    'week',
-  );
+  // 4. Run Trends + Interception agents in parallel
+  const [trends, opportunities] = await Promise.all([
+    runTrendsAgent({ brand: { name: brand.name, competitors }, gaps }, opts),
+    runInterceptionAgent({ brand, gaps, voice, contextIndex }, opts),
+  ]);
 
-  // Dedupe by URL — multiple queries can surface the same post.
-  // Keep the highest-scoring instance and remember its query/platform context.
-  const byUrl = new Map<string, (typeof tavilyResults)[number]>();
-  for (const r of tavilyResults) {
-    const existing = byUrl.get(r.url);
-    if (!existing || (r.score ?? 0) > (existing.score ?? 0)) byUrl.set(r.url, r);
-  }
-  const deduped = [...byUrl.values()];
-
-  const queryById = new Map(queries.map((q) => [q.query, q]));
-  const enriched = deduped.map((r) => {
-    const q = queryById.get(r.query);
-    const gap = gaps.find((g) => g.topicId === q?.topicId) ?? sortedGaps[0];
-    return {
-      ...r,
-      topicId: gap?.topicId ?? '',
-      topicName: gap?.topicName ?? 'Unknown',
-      topicVisibility: gap?.visibility ?? 0,
-    };
-  });
-
-  const scored = await scoreResults({ name: brand.name, domain: brand.domain }, enriched);
-  const scoredByUrl = new Map(scored.map((s) => [s.url, s]));
-
-  const opportunities: ConversationOpportunity[] = enriched
-    .map((r) => {
-      const s = scoredByUrl.get(r.url);
-      const q = queryById.get(r.query);
-      const id = btoa(r.url).slice(0, 24);
-      return {
-        id,
-        platform: r.platform,
-        url: r.url,
-        title: r.title,
-        content: r.content,
-        author: extractAuthor(r),
-        publishedAt: r.published_date ?? new Date().toISOString(),
-        relevanceScore: s?.relevanceScore ?? Math.round((r.score ?? 0.7) * 100),
-        // Prefer the query's intended connection type — it's tagged at query gen time
-        connectionType: q?.connectionType ?? s?.connectionType ?? 'direct',
-        relatedTopicId: r.topicId,
-        peecInsight:
-          s?.peecInsight ??
-          `You are invisible for "${r.topicName}" (${r.topicVisibility}%). This ${r.platform} post directly relates.`,
-        estimatedVisibilityLift:
-          s?.estimatedVisibilityLift ??
-          Number(((100 - r.topicVisibility) * ((s?.relevanceScore ?? 75) / 100) * 0.04).toFixed(1)),
-      };
-    })
-    .filter((o) => o.relevanceScore >= 60)
-    .sort((a, b) => b.relevanceScore - a.relevanceScore);
-
-  // 4. Trends agent (uses a separate broader sweep)
-  const trendsCorpus = await tavilySearch({
-    query: `${brand.name} OR ${competitors.slice(0, 2).join(' OR ')} CRM trends`,
-    platform: 'reddit',
-    timeRange: 'month',
-    maxResults: 15,
-  });
-  const trends = await summarizeTrends({ name: brand.name }, sortedGaps, trendsCorpus);
-
-  return { brand, overall, gaps, topDomains, voice, trends, opportunities };
-}
-
-function extractAuthor(r: { url: string; title: string }): string {
-  if (r.url.includes('linkedin.com/posts/')) {
-    const m = r.url.match(/posts\/([^_/]+)/);
-    if (m) return m[1].replace(/-/g, ' ');
-  }
-  if (r.url.includes('reddit.com/r/')) {
-    const m = r.url.match(/reddit\.com\/r\/([^/]+)/);
-    if (m) return `r/${m[1]}`;
-  }
-  if (r.url.includes('x.com/') || r.url.includes('twitter.com/')) {
-    const m = r.url.match(/(?:x|twitter)\.com\/([^/]+)/);
-    if (m) return `@${m[1]}`;
-  }
-  return 'unknown';
+  return { brand, overall, gaps, topDomains, voice, contextIndex, trends, opportunities };
 }

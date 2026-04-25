@@ -14,10 +14,10 @@ Last updated: 2026-04-25 (orchestrator)
 
 | Branch | Agent | Status | Owner |
 |---|---|---|---|
-| `agent-arch` | Agent architecture (Trends / Brand Context RAG / Conversation Interception) | in progress | federico + claude (this chat) |
-| `ui-polish` | UI fidelity — make it feel like a Peec extension | pending dispatch | TBD |
-| `live-apis` | Live API integration + reliability | pending dispatch | TBD |
-| `demo-data` | Hand-curated demo dataset + script | not yet | TBD |
+| `agent-arch` | Three agents extracted: `src/agents/{trends,context,interception}.ts`. Discovery refactored as a thin orchestrator. `BrandContextChunk` + `BrandContextIndex` + `AgentRunOptions` types added. Hardcoded Attio Brand Context corpus (8 chunks) for the RAG layer. | in progress | federico + claude (this chat) |
+| `ui-polish` | Header extracted, ConversationCard / Radar / VisibilityBar / TrendsRail / VoiceProfilePanel polished, `.peec-row` / `.peec-eyebrow` / modal-scrim / btn variants added in app.css. Working in another Conductor chat. | active | dispatched |
+| `live-apis` | `src/data/snapshot.json` shipped. peec.ts + tavily.ts now snapshot-default with `force` opts. `getApiStatus()` registry exposes peec/tavily/gemini freshness. Working in another Conductor chat. | active | dispatched |
+| `demo-data` | Not yet active. | pending | TBD |
 
 ## Open blockers
 

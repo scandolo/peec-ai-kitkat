@@ -20,4 +20,7 @@ Goal: build the three SWARM agents (Trends / Brand Context RAG / Conversation In
 
 ## Log
 
-- 2026-04-25 — Bootstrapped workbench, copied Peec screenshots to `.context/peec-references/`, copied logo to `public/peec-logo.jpg`. Branch `agent-arch` created from `main` (SHA `8ffb983`). Next: scaffold `src/agents/` modules.
+- 2026-04-25 — Bootstrapped workbench, copied Peec screenshots to `.context/peec-references/`, copied logo to `public/peec-logo.jpg`. Branch `agent-arch` created from `main` (SHA `8ffb983`).
+- 2026-04-25 — `live-apis` shipped `src/data/snapshot.json` and made services snapshot-default with `force` opts to refresh. `getApiStatus()` registry exposed. `ui-polish` polished ConversationCard, added `.peec-row` table-row hover, modal scrim/animations, btn variants, SWARM logo classes. Both look solid.
+- 2026-04-25 — Starting agent-arch refactor: split `discovery.ts` into `src/agents/{trends,context,interception}.ts`, add `BrandContextChunk` type, build a hardcoded Attio brand-context index for the RAG layer, fix the `own.domain → own.domains[0]` bug introduced by live-apis' new `PeecBrand.domains: string[]` shape, wire `force` through.
+- 2026-04-25 — Shipped on `agent-arch`: 3 agent modules + `discovery.ts` orchestrator + `BrandContextIndex` types + Attio context corpus (8 hand-written chunks). Verified my slice typechecks BOTH against live-apis's new service signatures AND against the older signatures at HEAD (so the branch is mergeable independently). Stripped `force` opts from service calls — services own snapshot/live decision today; reintroduce when live-apis lands `FetchOpts`. Ready to merge once live-apis lands.

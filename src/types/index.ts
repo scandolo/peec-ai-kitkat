@@ -66,3 +66,32 @@ export interface BrandSetup {
   voiceSources: string[];
   peecProjectId: string;
 }
+
+/**
+ * One indexed unit of the Brand Context RAG. Every reply we draft is grounded
+ * in chunks retrieved from the brand's own corpus — own site, founder LI,
+ * blog, customer quotes — so suggested angles cite real positioning rather
+ * than generic Gemini knowledge.
+ */
+export interface BrandContextChunk {
+  id: string;
+  source: string;
+  sourceType: 'homepage' | 'blog' | 'founder_post' | 'case_study' | 'docs' | 'press';
+  text: string;
+  topicIds?: string[];
+  /** Lightweight bag-of-words for keyword overlap retrieval. */
+  keywords: string[];
+}
+
+export interface BrandContextIndex {
+  brandName: string;
+  brandDomain: string;
+  chunks: BrandContextChunk[];
+  /** Short summary of positioning, products, proof. Mirrored into VoiceProfile. */
+  summary: string;
+}
+
+export interface AgentRunOptions {
+  /** Force live refresh, bypassing snapshot/cache. */
+  force?: boolean;
+}
