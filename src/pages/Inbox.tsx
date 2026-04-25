@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { InboxRow, type InboxTask, type InboxDraft, type TaskKind } from '../components/InboxRow';
 import { TaskDrawer } from '../components/TaskDrawer';
 import { FilterBar, type KindFilter } from '../components/FilterBar';
+import { InboxHero } from '../components/InboxHero';
 
 /**
  * Inbox — single ranked feed of tasks. Sorts by `estimated_lift × score`.
@@ -44,6 +45,7 @@ export function Inbox() {
         onChange={setFilter}
         counts={tasks ? countByKind(tasks) : null}
       />
+      <InboxHero tasks={tasks} />
       <div className="swarm-inbox-page">
         <div className="swarm-inbox-header">
           <div className="swarm-inbox-title">

@@ -1,0 +1,290 @@
+/* InboxHero — single horizontal strip above the Inbox feed.
+   Sits on the #fafafa content background, ~108px tall, four cells separated
+   by 1px hairlines. SVG-only data viz, CSS-only animations. */
+
+.swarm-hero {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 24px 0;
+}
+
+.swarm-hero-card {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1.35fr 1fr;
+  align-items: stretch;
+  background: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: var(--peec-shadow-xs);
+  overflow: hidden;
+}
+
+.swarm-hero-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 18px;
+  min-height: 96px;
+  min-width: 0;
+}
+
+.swarm-hero-cell + .swarm-hero-cell::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: var(--peec-separator-secondary);
+}
+
+.swarm-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--peec-fg-tertiary);
+  text-transform: uppercase;
+}
+
+.swarm-hero-eyebrow-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--peec-fg-tertiary);
+}
+
+.swarm-hero-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.swarm-hero-number {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.7px;
+  color: var(--peec-fg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.swarm-hero-unit {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--peec-fg-tertiary);
+  letter-spacing: -0.065px;
+}
+
+.swarm-hero-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.08px;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 6px;
+  border-radius: 9999px;
+}
+
+.swarm-hero-delta.is-up {
+  color: var(--peec-success-base);
+  background: var(--peec-badge-green-bg);
+}
+
+.swarm-hero-delta.is-down {
+  color: var(--peec-error-base);
+  background: var(--peec-badge-red-bg);
+}
+
+.swarm-hero-delta svg {
+  display: block;
+}
+
+.swarm-hero-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--peec-fg-secondary);
+  letter-spacing: -0.065px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swarm-hero-sub strong {
+  color: var(--peec-fg-primary);
+  font-weight: 600;
+}
+
+/* ----- Sparkline (visibility cell) -------------------------------------- */
+
+.swarm-hero-spark {
+  width: 100%;
+  height: 32px;
+  margin-top: 2px;
+  display: block;
+}
+
+.swarm-hero-spark-line {
+  fill: none;
+  stroke: var(--peec-fg-primary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.swarm-hero-spark-area {
+  fill: var(--peec-bg-tertiary);
+}
+
+.swarm-hero-spark-end {
+  fill: var(--peec-fg-primary);
+}
+
+/* ----- Mini bar (topic gap cell) ---------------------------------------- */
+
+.swarm-hero-bar-track {
+  position: relative;
+  height: 6px;
+  width: 100%;
+  background: var(--peec-bg-tertiary);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.swarm-hero-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--peec-warning-primary), #ff9a3c);
+  border-radius: 9999px;
+}
+
+.swarm-hero-bar-marker {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--peec-fg-primary);
+  border-radius: 1px;
+}
+
+.swarm-hero-bar-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--peec-fg-tertiary);
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  letter-spacing: 0;
+}
+
+.swarm-hero-bar-meta strong {
+  color: var(--peec-fg-secondary);
+  font-weight: 600;
+}
+
+/* ----- Agent pulse cell ------------------------------------------------- */
+
+.swarm-hero-pulse {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--peec-success-base);
+  flex-shrink: 0;
+}
+
+.swarm-hero-pulse.is-idle {
+  background: var(--peec-fg-quaternary);
+}
+
+.swarm-hero-pulse.is-live::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--peec-success-base);
+  opacity: 0.4;
+  animation: swarm-hero-pulse-ring 1.6s ease-out infinite;
+}
+
+.swarm-hero-pulse.is-live::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--peec-success-base);
+  opacity: 0.2;
+  animation: swarm-hero-pulse-ring 1.6s ease-out 0.5s infinite;
+}
+
+@keyframes swarm-hero-pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.55;
+  }
+  80%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.swarm-hero-agent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.swarm-hero-agent-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.112px;
+  color: var(--peec-fg-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swarm-hero-agent-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--peec-fg-tertiary);
+  letter-spacing: -0.065px;
+}
+
+.swarm-hero-agent-meta-dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--peec-fg-quaternary);
+}
+
+/* ----- Responsive ------------------------------------------------------- */
+
+@media (max-width: 880px) {
+  .swarm-hero-card {
+    grid-template-columns: 1fr 1fr;
+  }
+  .swarm-hero-cell:nth-child(3)::before,
+  .swarm-hero-cell:nth-child(2)::before {
+    display: none;
+  }
+}

@@ -6,7 +6,7 @@ When you need to edit a file outside your ownership zone (`ownership.md`), add a
 
 | File | Claimed by | Branch | Reason | Claimed at |
 |---|---|---|---|---|
-| _none_ | | | | |
+| `src/pages/Inbox.tsx` | visual-hero-strip | `visual-hero-strip` | Surgical edit: import + render `<InboxHero tasks={tasks} />` above the existing inbox header. | 2026-04-26 |
 
 ## How to claim
 
