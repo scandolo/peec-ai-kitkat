@@ -62,18 +62,65 @@ body {
   box-shadow: var(--peec-shadow-sm);
 }
 
+/* Interactive card — table-style row that hovers like Peec's tables */
+.peec-row {
+  background: var(--peec-bg-white);
+  border-radius: var(--peec-radius-lg);
+  box-shadow: var(--peec-shadow-xs);
+  transition:
+    background-color 120ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+  cursor: pointer;
+}
+
+.peec-row:hover {
+  background: var(--peec-table-hover);
+  box-shadow: var(--peec-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.peec-row:active {
+  background: var(--peec-table-active);
+  transform: translateY(0);
+  box-shadow: var(--peec-shadow-xs);
+}
+
 /* Pill primitive */
 .peec-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
+  padding: 2px 8px;
   border-radius: var(--peec-radius-pill);
-  font-size: 13px;
+  font-size: 11px;
+  line-height: 16px;
   font-weight: 500;
-  letter-spacing: -0.065px;
+  letter-spacing: 0;
   background: var(--peec-bg-subtle, #1717170a);
   border: 1px solid var(--peec-stroke-primary);
+  white-space: nowrap;
+  transition: filter 120ms ease, transform 80ms ease, background-color 120ms ease;
+}
+
+button.peec-pill {
+  cursor: pointer;
+}
+
+button.peec-pill:hover {
+  filter: brightness(0.97) saturate(1.05);
+}
+
+button.peec-pill:active {
+  transform: scale(0.97);
+  filter: brightness(0.94);
+}
+
+.peec-pill[data-size="md"] {
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.065px;
 }
 
 /* Button primitives */
@@ -82,14 +129,23 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 32px;
-  padding: 0 12px;
+  height: 30px;
+  padding: 0 10px;
   border-radius: var(--peec-radius-md);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: -0.112px;
+  letter-spacing: -0.065px;
   cursor: pointer;
-  transition: background-color 100ms ease;
+  transition: background-color 100ms ease, transform 80ms ease, box-shadow 120ms ease;
+  white-space: nowrap;
+}
+
+.peec-btn:active { transform: scale(0.98); }
+
+.peec-btn-sm {
+  height: 26px;
+  padding: 0 8px;
+  font-size: 12px;
 }
 
 .peec-btn-primary {
@@ -107,3 +163,111 @@ body {
 }
 
 .peec-btn-secondary:hover { background: var(--peec-table-hover); }
+
+.peec-btn-ghost {
+  background: transparent;
+  color: var(--peec-fg-secondary);
+}
+
+.peec-btn-ghost:hover {
+  background: var(--peec-table-hover);
+  color: var(--peec-fg-primary);
+}
+
+/* Inputs */
+.peec-input {
+  width: 100%;
+  background: var(--peec-bg-white);
+  border-radius: var(--peec-radius-md);
+  box-shadow: var(--peec-shadow-btn-primary);
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  letter-spacing: -0.065px;
+  color: var(--peec-fg-primary);
+  font-family: inherit;
+  transition: box-shadow 120ms ease;
+  resize: vertical;
+}
+
+.peec-input:focus {
+  outline: none;
+  box-shadow: 0px 0px 0px 1px #2b7fff, 0px 0px 0px 3px #155dfc1a;
+}
+
+/* Label/eyebrow */
+.peec-eyebrow {
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--peec-fg-tertiary);
+}
+
+/* Section heading row (matches Peec's panel headers) */
+.peec-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--peec-separator-primary);
+}
+
+/* Subtle divider used inside cards */
+.peec-divider {
+  height: 1px;
+  background: var(--peec-separator-primary);
+}
+
+/* Modal scrim */
+.peec-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(23, 23, 23, 0.42);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: peec-fade-in 140ms ease;
+}
+
+.peec-modal-enter {
+  animation: peec-modal-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes peec-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes peec-modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* SWARM logo mark */
+.swarm-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--peec-bg-black);
+  color: var(--peec-fg-primary-white);
+  font-family: var(--peec-font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -0.4px;
+  box-shadow: var(--peec-shadow-btn-inverse);
+}
+
+.swarm-wordmark {
+  font-family: var(--peec-font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.4px;
+  color: var(--peec-fg-primary);
+}

@@ -8,95 +8,138 @@ export function ConversationCard({
   onOpen: () => void;
 }) {
   return (
-    <div className="peec-card p-4 hover:shadow-[var(--peec-shadow-sm)] transition-shadow">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <PlatformBadge platform={opportunity.platform} />
-          <ConnectionBadge type={opportunity.connectionType} />
-          <span
-            className="t-caption"
-            style={{ color: 'var(--peec-fg-tertiary)' }}
+    <div
+      className="peec-row p-3.5"
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+    >
+      <div className="flex items-start gap-3">
+        <PlatformGlyph platform={opportunity.platform} />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
+            <ConnectionBadge type={opportunity.connectionType} />
+            <span className="peec-eyebrow" style={{ color: 'var(--peec-fg-quaternary)' }}>·</span>
+            <span
+              className="text-[11px] font-medium"
+              style={{ color: 'var(--peec-fg-tertiary)' }}
+            >
+              {opportunity.author}
+            </span>
+            <span className="peec-eyebrow" style={{ color: 'var(--peec-fg-quaternary)' }}>·</span>
+            <span
+              className="text-[11px] font-medium"
+              style={{ color: 'var(--peec-fg-tertiary)' }}
+            >
+              {formatRelativeTime(opportunity.publishedAt)}
+            </span>
+          </div>
+
+          <h3 className="t-body-m mb-1 leading-snug" style={{ fontWeight: 600 }}>
+            {opportunity.title}
+          </h3>
+          <p
+            className="text-[12.5px] leading-[18px] line-clamp-2"
+            style={{ color: 'var(--peec-fg-secondary)', letterSpacing: '-0.065px' }}
           >
-            {opportunity.author} · {formatRelativeTime(opportunity.publishedAt)}
-          </span>
-        </div>
-        <ScoreChip score={opportunity.relevanceScore} />
-      </div>
+            {opportunity.content}
+          </p>
 
-      <h3 className="t-body-l mb-1">{opportunity.title}</h3>
-      <p
-        className="t-body-s mb-3 line-clamp-2"
-        style={{ color: 'var(--peec-fg-secondary)' }}
-      >
-        {opportunity.content}
-      </p>
-
-      <div
-        className="rounded-[8px] p-3 mb-3"
-        style={{
-          background: 'var(--peec-surface-secondary)',
-          border: '1px solid var(--peec-stroke-soft, #1717170f)',
-        }}
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.4" />
-            <path d="M8 5v3l2 1" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-          </svg>
-          <span
-            className="t-caption font-semibold uppercase"
+          <div
+            className="rounded-[8px] px-2.5 py-2 mt-2.5 flex items-start gap-2"
             style={{
-              color: 'var(--peec-feature-2-base)',
-              letterSpacing: '0.4px',
+              background: '#155dfc0a',
+              boxShadow: 'inset 0 0 0 1px #155dfc1f',
             }}
           >
-            Peec impact
-          </span>
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="mt-[2px] flex-shrink-0"
+              style={{ color: 'var(--peec-feature-2-base)' }}
+            >
+              <path
+                d="M8 1.5L9.6 5.6L14 7.2L9.6 8.8L8 13L6.4 8.8L2 7.2L6.4 5.6L8 1.5Z"
+                fill="currentColor"
+                fillOpacity="0.18"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-baseline justify-between gap-2 mb-0.5">
+                <span
+                  className="peec-eyebrow"
+                  style={{ color: 'var(--peec-feature-2-base)' }}
+                >
+                  Peec impact
+                </span>
+                <span
+                  className="text-[11px] font-semibold tabular-nums"
+                  style={{ color: 'var(--peec-feature-2-base)' }}
+                >
+                  +{opportunity.estimatedVisibilityLift.toFixed(1)}pp
+                </span>
+              </div>
+              <p
+                className="text-[12.5px] leading-[17px]"
+                style={{ color: 'var(--peec-fg-primary)', letterSpacing: '-0.065px' }}
+              >
+                {opportunity.peecInsight}
+              </p>
+            </div>
+          </div>
         </div>
-        <p className="t-body-s" style={{ color: 'var(--peec-fg-primary)' }}>
-          {opportunity.peecInsight}
-        </p>
-        <p
-          className="t-caption mt-1"
-          style={{ color: 'var(--peec-fg-secondary)' }}
-        >
-          Estimated lift: <strong style={{ color: 'var(--peec-feature-2-base)' }}>+{opportunity.estimatedVisibilityLift.toFixed(1)}pp</strong>
-        </p>
-      </div>
 
-      <div className="flex items-center justify-between">
-        <a
-          href={opportunity.url}
-          target="_blank"
-          rel="noreferrer"
-          className="t-body-s underline-offset-4 hover:underline"
-          style={{ color: 'var(--peec-fg-secondary)' }}
-        >
-          View original →
-        </a>
-        <button className="peec-btn peec-btn-primary" onClick={onOpen}>
-          Open draft
-        </button>
+        <div className="flex flex-col items-end gap-2 flex-shrink-0">
+          <ScoreChip score={opportunity.relevanceScore} />
+          <button
+            className="peec-btn peec-btn-primary peec-btn-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpen();
+            }}
+          >
+            Draft →
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-function PlatformBadge({ platform }: { platform: ConversationOpportunity['platform'] }) {
-  const labels = { reddit: 'Reddit', linkedin: 'LinkedIn', x: 'X' } as const;
-  const colors = {
-    reddit: { bg: 'var(--peec-badge-orange-bg)', text: 'var(--peec-badge-orange-text)' },
-    linkedin: { bg: 'var(--peec-badge-blue-bg)', text: 'var(--peec-badge-blue-text)' },
-    x: { bg: 'var(--peec-bg-tertiary)', text: 'var(--peec-fg-primary)' },
+function PlatformGlyph({ platform }: { platform: ConversationOpportunity['platform'] }) {
+  const map = {
+    reddit: { letter: 'R', bg: 'var(--peec-bg-secondary)', text: 'var(--peec-badge-orange-text)' },
+    linkedin: { letter: 'in', bg: 'var(--peec-bg-secondary)', text: 'var(--peec-badge-blue-text)' },
+    x: { letter: '𝕏', bg: 'var(--peec-bg-secondary)', text: 'var(--peec-fg-primary)' },
   } as const;
-  const c = colors[platform];
+  const c = map[platform];
   return (
-    <span
-      className="peec-pill"
-      style={{ background: c.bg, color: c.text, borderColor: 'transparent' }}
+    <div
+      className="flex items-center justify-center flex-shrink-0"
+      style={{
+        width: 26,
+        height: 26,
+        borderRadius: 6,
+        background: c.bg,
+        color: c.text,
+        fontWeight: 700,
+        fontSize: 11,
+        letterSpacing: '-0.2px',
+      }}
     >
-      {labels[platform]}
-    </span>
+      {c.letter}
+    </div>
   );
 }
 
@@ -110,7 +153,16 @@ function ConnectionBadge({ type }: { type: ConversationOpportunity['connectionTy
   return (
     <span
       className="peec-pill"
-      style={{ background: c.bg, color: c.text, borderColor: 'transparent', textTransform: 'uppercase', letterSpacing: '0.4px' }}
+      style={{
+        background: c.bg,
+        color: c.text,
+        borderColor: 'transparent',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        fontWeight: 600,
+        fontSize: 10,
+        padding: '1px 7px',
+      }}
     >
       {type}
     </span>
@@ -118,17 +170,20 @@ function ConnectionBadge({ type }: { type: ConversationOpportunity['connectionTy
 }
 
 function ScoreChip({ score }: { score: number }) {
-  const color =
-    score >= 85 ? 'var(--peec-badge-green-text)' : score >= 70 ? 'var(--peec-badge-amber-text)' : 'var(--peec-fg-secondary)';
+  const palette =
+    score >= 85
+      ? { bg: 'var(--peec-badge-green-bg)', text: 'var(--peec-badge-green-text)' }
+      : { bg: 'var(--peec-bg-secondary)', text: 'var(--peec-fg-secondary)' };
   return (
     <span
-      className="peec-pill"
+      className="peec-pill tabular-nums"
       style={{
-        background: 'var(--peec-bg-secondary)',
-        color,
+        background: palette.bg,
+        color: palette.text,
         borderColor: 'transparent',
-        fontVariantNumeric: 'tabular-nums',
+        fontWeight: 600,
       }}
+      title={`Relevance ${score}/100`}
     >
       {score}
     </span>

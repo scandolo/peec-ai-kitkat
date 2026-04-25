@@ -8,38 +8,86 @@ import type {
   VoiceProfile,
 } from '../types';
 import type { TavilyResult } from './tavily';
+import snapshot from '../data/snapshot.json';
+import { setApiMode } from './peec';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
-const MODEL = 'gemini-2.5-flash-lite';
+const MODEL = 'gemini-2.5-flash';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 
 interface GeminiPart { text: string }
 interface GeminiContent { role?: 'user' | 'model'; parts: GeminiPart[] }
 interface GeminiResponse { candidates?: Array<{ content: GeminiContent }> }
 
+// ────────────────────────────────────────────────────────────
+// Rate limiter — token bucket, max 2 calls/sec.
+// All Gemini calls funnel through `takeSlot()` so we can't burst
+// past the limit even when the orchestrator fans out in parallel.
+// ────────────────────────────────────────────────────────────
+
+const MAX_PER_SECOND = 2;
+const MIN_GAP_MS = 1000 / MAX_PER_SECOND; // 500ms
+let nextAvailableAt = 0;
+
+async function takeSlot(): Promise<void> {
+  const now = Date.now();
+  const wait = Math.max(0, nextAvailableAt - now);
+  nextAvailableAt = Math.max(now, nextAvailableAt) + MIN_GAP_MS;
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Single low-level call with throttle + exponential backoff on 429.
+ * Backoff: 1s, 2s, 4s — 3 retries max. After that, give up and return null
+ * so the caller can fall back to the snapshot.
+ */
 async function generate(prompt: string, system?: string): Promise<string | null> {
   if (!API_KEY) return null;
-  try {
-    const body = {
-      contents: [{ role: 'user' as const, parts: [{ text: prompt }] }],
-      ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
-      generationConfig: { responseMimeType: 'application/json', temperature: 0.5 },
-    };
-    const res = await fetch(`${GEMINI_BASE}/models/${MODEL}:generateContent?key=${API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      console.warn(`gemini ${res.status} — falling back`);
-      return null;
+  const body = {
+    contents: [{ role: 'user' as const, parts: [{ text: prompt }] }],
+    ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
+    generationConfig: { responseMimeType: 'application/json', temperature: 0.5 },
+  };
+
+  const MAX_ATTEMPTS = 3;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    await takeSlot();
+    try {
+      const res = await fetch(`${GEMINI_BASE}/models/${MODEL}:generateContent?key=${API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.status === 429) {
+        if (attempt === MAX_ATTEMPTS - 1) {
+          console.warn('gemini 429 — giving up, falling back');
+          return null;
+        }
+        const retryAfter = Number(res.headers.get('retry-after'));
+        const backoff = Number.isFinite(retryAfter) && retryAfter > 0
+          ? Math.min(retryAfter * 1000, 4000)
+          : 500 * Math.pow(2, attempt); // 500ms, 1s
+        console.warn(`gemini 429 — retrying in ${backoff}ms (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
+        await sleep(backoff);
+        continue;
+      }
+      if (!res.ok) {
+        console.warn(`gemini ${res.status} — falling back`);
+        return null;
+      }
+      const data = (await res.json()) as GeminiResponse;
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
+      if (text) setApiMode('gemini', 'live');
+      return text;
+    } catch (err) {
+      console.warn(`gemini attempt ${attempt + 1} threw`, err);
+      if (attempt === MAX_ATTEMPTS - 1) return null;
+      await sleep(500 * Math.pow(2, attempt));
     }
-    const data = (await res.json()) as GeminiResponse;
-    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
-  } catch (err) {
-    console.warn('gemini threw — falling back', err);
-    return null;
   }
+  return null;
 }
 
 function parseJson<T>(text: string | null, fallback: T): T {
@@ -68,7 +116,10 @@ export async function generateQueries(
   brand: { name: string; domain: string; competitors: string[] },
   gaps: VisibilityGap[],
 ): Promise<GeneratedQuery[]> {
-  if (!API_KEY) return mockQueries(brand, gaps);
+  if (!API_KEY) {
+    setApiMode('gemini', 'cached');
+    return mockQueries(brand, gaps);
+  }
   const prompt = `Brand: ${brand.name} (${brand.domain})
 Competitors: ${brand.competitors.join(', ')}
 Visibility gaps (Peec topics where this brand is losing): ${gaps.map((g) => `${g.topicName} (${g.visibility}%)`).join(', ')}
@@ -82,7 +133,11 @@ For each query, pick ONE platform (reddit, linkedin, or x). Return strict JSON:
 {"queries":[{"query":"...","platform":"reddit","connectionType":"direct","topicId":"<topic id>"}]}`;
   const text = await generate(prompt);
   const parsed = parseJson<{ queries: GeneratedQuery[] }>(text, { queries: [] });
-  return parsed.queries.length ? parsed.queries : mockQueries(brand, gaps);
+  if (!parsed.queries.length) {
+    setApiMode('gemini', 'cached');
+    return mockQueries(brand, gaps);
+  }
+  return parsed.queries;
 }
 
 // ────────────────────────────────────────────────────────────
@@ -102,7 +157,10 @@ export async function scoreResults(
   brand: { name: string; domain: string },
   results: Array<TavilyResult & { platform: Platform; query: string; topicId: string; topicName: string; topicVisibility: number }>,
 ): Promise<ScoredResult[]> {
-  if (!API_KEY) return mockScored(results);
+  if (!API_KEY) {
+    setApiMode('gemini', 'cached');
+    return mockScored(results);
+  }
   const prompt = `You are scoring conversations for a brand called ${brand.name} (${brand.domain}).
 For each post, return:
 - relevanceScore (0-100): how worth engaging
@@ -117,7 +175,11 @@ ${results.map((r, i) => `${i + 1}. [${r.platform}] (${r.topicName} ${r.topicVisi
 Return strict JSON: {"scored":[{"url":"...","relevanceScore":85,"connectionType":"direct","peecInsight":"...","estimatedVisibilityLift":2.4,"suggestedAngle":"..."}]}`;
   const text = await generate(prompt);
   const parsed = parseJson<{ scored: ScoredResult[] }>(text, { scored: [] });
-  return parsed.scored.length ? parsed.scored : mockScored(results);
+  if (!parsed.scored.length) {
+    setApiMode('gemini', 'cached');
+    return mockScored(results);
+  }
+  return parsed.scored;
 }
 
 // ────────────────────────────────────────────────────────────
@@ -128,7 +190,10 @@ export async function extractVoice(
   brand: { name: string; domain: string },
   corpus: Array<{ source: string; text: string }>,
 ): Promise<VoiceProfile> {
-  if (!API_KEY) return mockVoice(brand.name);
+  if (!API_KEY || corpus.length === 0) {
+    setApiMode('gemini', 'cached');
+    return snapshot.gemini.voice as VoiceProfile;
+  }
   const prompt = `Analyze the brand voice of ${brand.name} based on the corpus below.
 Return strict JSON matching:
 {
@@ -144,7 +209,7 @@ Return strict JSON matching:
 Corpus:
 ${corpus.map((c, i) => `--- ${i + 1}. ${c.source} ---\n${c.text.slice(0, 1500)}`).join('\n\n')}`;
   const text = await generate(prompt);
-  return parseJson<VoiceProfile>(text, mockVoice(brand.name));
+  return parseJson<VoiceProfile>(text, snapshot.gemini.voice as VoiceProfile);
 }
 
 /**
@@ -176,7 +241,10 @@ export async function generateDraftScaffold(
   opportunity: Pick<ConversationOpportunity, 'platform' | 'title' | 'content' | 'connectionType' | 'peecInsight'>,
   angle: string,
 ): Promise<DraftScaffold> {
-  if (!API_KEY) return mockDraft(opportunity, angle);
+  if (!API_KEY) {
+    setApiMode('gemini', 'cached');
+    return mockDraft(opportunity, angle);
+  }
   const platformRules = PLATFORM_RULES[opportunity.platform];
   const prompt = `A ${opportunity.platform} post:
 """
@@ -217,7 +285,10 @@ export async function summarizeTrends(
   gaps: VisibilityGap[],
   trendCorpus: TavilyResult[],
 ): Promise<Trend[]> {
-  if (!API_KEY) return mockTrends(gaps);
+  if (!API_KEY) {
+    setApiMode('gemini', 'cached');
+    return mockTrends(gaps);
+  }
   const prompt = `For brand ${brand.name}, surface 5 trending themes from the corpus that map to its weak Peec topics.
 Weak topics (with topic_id): ${gaps.map((g) => `${g.topicName} [${g.topicId}] @ ${g.visibility}%`).join(', ')}
 
@@ -228,11 +299,15 @@ For each trend, estimate expectedLiftPp = clamp((100 - topicVisibility) * 0.05, 
 Return strict JSON: {"trends":[{"id":"t1","title":"...","description":"...","surface":"world|niche","relatedTopicId":"<topic_id>","expectedLiftPp":2.0,"evidence":["url1","url2"]}]}`;
   const text = await generate(prompt);
   const parsed = parseJson<{ trends: Trend[] }>(text, { trends: [] });
-  return parsed.trends.length ? parsed.trends : mockTrends(gaps);
+  if (!parsed.trends.length) {
+    setApiMode('gemini', 'cached');
+    return mockTrends(gaps);
+  }
+  return parsed.trends;
 }
 
 // ────────────────────────────────────────────────────────────
-// MOCKS — used when no API key
+// MOCKS — used when no API key or fallback path
 // ────────────────────────────────────────────────────────────
 
 function mockQueries(
@@ -276,29 +351,6 @@ function mockScored(
       suggestedAngle: `Lead with a specific, non-promotional point about ${r.topicName.toLowerCase()}.`,
     };
   });
-}
-
-function mockVoice(brandName: string): VoiceProfile {
-  return {
-    summary: `${brandName} is witty, anti-enterprise, and builder-first. Plain language, never corporate.`,
-    traits: ['witty', 'direct', 'opinionated', 'modern', 'design-led'],
-    toneSpectrum: { formality: 28, technicality: 55, boldness: 75, humor: 60, warmth: 50 },
-    signaturePhrases: [
-      'CRM that feels like the rest of your stack',
-      'designed in this decade',
-      'no admin required',
-      'built for the next generation of teams',
-    ],
-    taboos: [
-      'never say "synergy", "leverage", or "robust"',
-      'never use enterprise jargon ("solution", "stakeholder")',
-      'never sound like Salesforce',
-    ],
-    engagementStyle:
-      'Helpful first, opinionated second. Drops a specific, builder-flavored take. Mentions the brand only when it directly answers the question.',
-    brandContextSummary:
-      'Modern, design-led CRM positioned against Salesforce/HubSpot. Used by Modal, Replicate, Vercel, Granola. Strength: speed of setup, customizable data model, modern UI. Pricing transparent and developer-friendly.',
-  };
 }
 
 function mockDraft(

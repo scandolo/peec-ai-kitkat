@@ -1,0 +1,685 @@
+{
+  "generatedAt": "2026-04-25T21:44:18.503Z",
+  "source": "live",
+  "peec": {
+    "projectId": "or_47ccb54e-0f32-4c95-b460-6a070499d084",
+    "ownBrandId": "kw_aa69e6a9-2d6b-40be-84a7-77b8bb3a04aa",
+    "dateRange": {
+      "start": "2025-01-01",
+      "end": "2026-04-25"
+    },
+    "brands": [
+      {
+        "id": "kw_0f576912-e163-4829-a15e-a70238d5fec7",
+        "name": "Pipedrive",
+        "domains": [
+          "pipedrive.com"
+        ],
+        "is_own": false,
+        "color": "#449464"
+      },
+      {
+        "id": "kw_2cb435a5-37da-4b01-9767-f7e878f7ecc2",
+        "name": "HubSpot",
+        "domains": [
+          "hubspot.com"
+        ],
+        "is_own": false,
+        "color": "#fc5c34"
+      },
+      {
+        "id": "kw_5604d168-9e16-4b79-aeec-2628322bb240",
+        "name": "Salesforce",
+        "domains": [
+          "salesforce.com"
+        ],
+        "is_own": false,
+        "color": "#049cdc"
+      },
+      {
+        "id": "kw_aa69e6a9-2d6b-40be-84a7-77b8bb3a04aa",
+        "name": "Attio",
+        "domains": [
+          "attio.com"
+        ],
+        "is_own": true,
+        "color": "#06b6d4"
+      },
+      {
+        "id": "kw_f8720a05-a06d-4702-8fde-d73d071696de",
+        "name": "Zoho",
+        "domains": [
+          "zoho.com"
+        ],
+        "is_own": false,
+        "color": "#f9c764"
+      }
+    ],
+    "topics": [
+      {
+        "id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc",
+        "name": "AI in Sales"
+      },
+      {
+        "id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1",
+        "name": "Data Integration"
+      },
+      {
+        "id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8",
+        "name": "Product-Led Growth"
+      },
+      {
+        "id": "to_97cdc70b-1d51-468f-8248-662bd2714176",
+        "name": "Revenue Operations"
+      },
+      {
+        "id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab",
+        "name": "CRM Automation"
+      }
+    ],
+    "prompts": [
+      {
+        "id": "pr_05a66669-478c-4b25-94bc-9119409e5e2f",
+        "text": "How to automate lead routing effectively using modern CRM software",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_0dcf8ff5-3a17-48ea-9297-4e0c979593f9",
+        "text": "Which CRM provides the best real-time data streaming for GTM teams?",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_19c5feda-47ae-434c-9515-2f286143adce",
+        "text": "Best CRM platforms for product-led growth teams tracking user adoption",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_1c69dcd9-180a-43de-a48e-395b017a997c",
+        "text": "Best CRM for managing complex revenue workflows and reporting",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_1d99d282-2b50-4a16-8d85-268b3c3ece36",
+        "text": "What makes a CRM suitable for a product-led growth strategy?",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_251f1fe6-fd2a-4c8e-a184-e4e46aee81f9",
+        "text": "Attio vs Salesforce for complex multi-source data integration",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_27a6315e-9370-4352-add7-e8f5bd4753cb",
+        "text": "Attio features for revenue operations transparency and accuracy",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_2c55f71d-8afc-48d6-89e6-1cfd7e722d1f",
+        "text": "What features should I look for in a highly automated CRM?",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_3059babd-90cb-4223-9199-7b830036dfc5",
+        "text": "Easiest CRM to integrate with Slack and external product databases",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_34282288-3a47-4eb4-a016-993f1784384a",
+        "text": "Top CRM tools for identifying and converting free-to-paid users",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_3a93374d-e31c-46ad-a73a-14f3efc0fbfa",
+        "text": "What are the most effective AI features for modern sales operations?",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_3adf0eef-1827-4ee3-bc62-960c2fae5dfb",
+        "text": "Attio capabilities for product-led sales teams",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_4476189b-b687-4867-b3ef-20e667a9868c",
+        "text": "Easiest CRM automation platforms to implement for a 50-person sales team",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_46e94e3b-94ee-4f19-bfb9-2f424de79383",
+        "text": "Best AI sales CRM for small teams needing enterprise-level insights",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_492407dd-3a57-4185-aed1-61603bac0f50",
+        "text": "Top-rated CRM platforms for RevOps teams focused on funnel visibility",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_49383409-b4a4-4392-88df-bc82e8e8cf2c",
+        "text": "What should I look for in a CRM's data synchronization architecture?",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_532aefe1-24c3-431e-94e6-407815f012e9",
+        "text": "Top AI sales tools that integrate seamlessly with email and calendar",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_535d3e07-eb82-44cf-9568-681a0226c0e9",
+        "text": "Attio for RevOps: Is it better than legacy CRM options?",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_548af433-96f3-4469-a714-d29e17fd1f45",
+        "text": "Attio vs HubSpot for product-led growth sales motions",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_55057051-c8e2-4704-a601-1b99543ed8d2",
+        "text": "Attio API documentation and integration capabilities for developers",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_6665222d-ee6c-46dd-9bca-cb00cea26915",
+        "text": "Best CRM for engineers building custom internal revenue tools",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_7244fe49-2722-4c22-8bc5-74d287c375c0",
+        "text": "Best enterprise CRM for centralized revenue data and operations",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_736a650b-67e1-4dd8-beff-2dbe90a75898",
+        "text": "How to sync product usage data into a CRM effectively",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_7a70f787-6649-4d70-a8b6-35d81bb928cb",
+        "text": "How does AI-driven CRM intelligence improve win rates?",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_7da5555e-45cc-4eb1-b1c9-829b77e44069",
+        "text": "How to align product usage signals with CRM sales workflows",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_7e2281ce-f651-4726-90be-4e15158bd2dd",
+        "text": "Which CRM offers the most flexible automation engine for complex sales cycles?",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_8d1c7b32-eb20-4405-99a1-74e38e5e1e24",
+        "text": "Attio AI features compared to HubSpot for sales team productivity",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_906b3d16-36aa-4db1-a523-659e4373a66a",
+        "text": "Attio vs Salesforce for custom CRM automation workflows",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_979895c3-12c2-400a-9fcb-b85bf94c54cf",
+        "text": "How to design a scalable revenue operations tech stack",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_9d299477-08dd-4252-8817-9b1eb9cd22ba",
+        "text": "Best CRM automation tools for scaling revenue teams without manual data entry",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_9e403086-0637-4293-83e7-4789813208c5",
+        "text": "Compare CRM automation tools with robust webhooks and API support",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_a22baef1-1877-4c9f-a3d3-2e3afc944b96",
+        "text": "Most affordable CRM for RevOps teams scaling their operations",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_ab00a2c3-108f-4d2a-914c-bd15b958109d",
+        "text": "Compare CRM platforms based on API rate limits and developer support",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_b6006160-7593-4a4c-ab4e-07bfb0a4a1b6",
+        "text": "Most accurate AI CRM for automating manual data entry for reps",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_b60c2420-4620-4b6a-ae56-8be2aa0c7d80",
+        "text": "Most reliable CRM for automating cross-departmental revenue workflows",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_b941b2b8-65d6-4f2a-8898-040ab39e3e25",
+        "text": "Best CRM for scaling a product-led sales motion quickly",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_bdcc62e6-22b4-45b4-ab1a-ff6786bcee34",
+        "text": "Which CRM is most popular among modern RevOps leaders?",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_c59d05f2-0311-408f-aca1-c680c24ec9dc",
+        "text": "Best CRM platforms with developer-friendly APIs for custom data integration",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_cd03ebde-55ed-4ec5-bf2b-308ffe56c058",
+        "text": "Top-rated CRM automation platforms for high-growth startups",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_cecd94e1-28eb-4a13-8fb5-119959ffa033",
+        "text": "Attio automation capabilities for custom data triggers",
+        "topic_id": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab"
+      },
+      {
+        "id": "pr_d23e7870-e527-4432-8f28-966709ed868a",
+        "text": "Which CRM provides the best visibility into PLG customer journeys?",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_d280b36d-98ce-466f-a7e1-b2254a12b91e",
+        "text": "What are the key requirements for a modern RevOps CRM platform?",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_dc713738-efac-4357-a76a-aabf4e7b9f3a",
+        "text": "Compare CRM options for tracking product-led growth metrics",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_e1978d1d-9274-4e5d-8b8f-bb7e88eb29a4",
+        "text": "Which CRM uses AI best to clean and enrich contact data automatically?",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_e494f82a-2530-4cdb-b9cb-ff11bb20c33f",
+        "text": "Compare AI-native CRM platforms for deal health tracking",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_f4a9de17-7f24-4655-bd05-bed893253904",
+        "text": "Top CRM tools that offer native integration with modern data warehouses",
+        "topic_id": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1"
+      },
+      {
+        "id": "pr_f5fcca08-adb8-40f8-9491-6a6d6ced4052",
+        "text": "Best AI-powered CRM tools for predictive lead scoring and sales forecasting",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      },
+      {
+        "id": "pr_f6dbaa57-7a52-4137-80f6-76c9356c6360",
+        "text": "Compare CRM tools for RevOps reporting and pipeline management",
+        "topic_id": "to_97cdc70b-1d51-468f-8248-662bd2714176"
+      },
+      {
+        "id": "pr_f7c957a3-fc90-4344-a8ab-8e1a6b3acd65",
+        "text": "Easiest CRM for PLG teams to manage high-volume lead pipelines",
+        "topic_id": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8"
+      },
+      {
+        "id": "pr_fca19f34-3436-4089-814c-2529b739e1a0",
+        "text": "Attio AI vs Pipedrive for automated sales activity logging",
+        "topic_id": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc"
+      }
+    ],
+    "brandReportOverall": [
+      {
+        "brand_id": "kw_2cb435a5-37da-4b01-9767-f7e878f7ecc2",
+        "brand_name": "HubSpot",
+        "share_of_voice": 30.6,
+        "visibility": 77.9,
+        "sentiment": 65,
+        "position": 2.46
+      },
+      {
+        "brand_id": "kw_5604d168-9e16-4b79-aeec-2628322bb240",
+        "brand_name": "Salesforce",
+        "share_of_voice": 27.7,
+        "visibility": 73.2,
+        "sentiment": 63,
+        "position": 2.96
+      },
+      {
+        "brand_id": "kw_0f576912-e163-4829-a15e-a70238d5fec7",
+        "brand_name": "Pipedrive",
+        "share_of_voice": 12.5,
+        "visibility": 36.7,
+        "sentiment": 68,
+        "position": 4.43
+      },
+      {
+        "brand_id": "kw_f8720a05-a06d-4702-8fde-d73d071696de",
+        "brand_name": "Zoho",
+        "share_of_voice": 8.7,
+        "visibility": 35.6,
+        "sentiment": 68,
+        "position": 4.91
+      },
+      {
+        "brand_id": "kw_aa69e6a9-2d6b-40be-84a7-77b8bb3a04aa",
+        "brand_name": "Attio",
+        "share_of_voice": 20.4,
+        "visibility": 32.9,
+        "sentiment": 64,
+        "position": 2.83
+      }
+    ],
+    "brandByTopic": {
+      "kw_aa69e6a9-2d6b-40be-84a7-77b8bb3a04aa": [
+        {
+          "topicId": "to_8f9381cf-7c52-4277-b326-1fbd4d9782d8",
+          "visibility": 41.9,
+          "shareOfVoice": 21.8,
+          "sentiment": 66
+        },
+        {
+          "topicId": "to_1580a71e-41c3-4313-9f83-ff330a1d48dc",
+          "visibility": 33.3,
+          "shareOfVoice": 22.3,
+          "sentiment": 62
+        },
+        {
+          "topicId": "to_c48a31d6-58be-4738-8d02-b88d5df3d0ab",
+          "visibility": 30,
+          "shareOfVoice": 15.3,
+          "sentiment": 62
+        },
+        {
+          "topicId": "to_97cdc70b-1d51-468f-8248-662bd2714176",
+          "visibility": 30,
+          "shareOfVoice": 23.2,
+          "sentiment": 65
+        },
+        {
+          "topicId": "to_28f787cc-6d83-40ce-a3c6-ead428c6dfa1",
+          "visibility": 28.9,
+          "shareOfVoice": 17.3,
+          "sentiment": 63
+        }
+      ]
+    },
+    "topDomains": [
+      {
+        "domain": "attio.com",
+        "type": "OWN",
+        "retrieval_count": 238,
+        "citation_count": 167
+      },
+      {
+        "domain": "monday.com",
+        "type": "CORPORATE",
+        "retrieval_count": 155,
+        "citation_count": 115
+      },
+      {
+        "domain": "youtube.com",
+        "type": "UGC",
+        "retrieval_count": 196,
+        "citation_count": 96
+      },
+      {
+        "domain": "stacksync.com",
+        "type": "CORPORATE",
+        "retrieval_count": 94,
+        "citation_count": 95
+      },
+      {
+        "domain": "prospeo.io",
+        "type": "CORPORATE",
+        "retrieval_count": 86,
+        "citation_count": 89
+      },
+      {
+        "domain": "reddit.com",
+        "type": "UGC",
+        "retrieval_count": 104,
+        "citation_count": 82
+      },
+      {
+        "domain": "authencio.com",
+        "type": "CORPORATE",
+        "retrieval_count": 70,
+        "citation_count": 69
+      },
+      {
+        "domain": "hubspot.com",
+        "type": "COMPETITOR",
+        "retrieval_count": 67,
+        "citation_count": 62
+      },
+      {
+        "domain": "techradar.com",
+        "type": "EDITORIAL",
+        "retrieval_count": 30,
+        "citation_count": 58
+      },
+      {
+        "domain": "syncgtm.com",
+        "type": "CORPORATE",
+        "retrieval_count": 38,
+        "citation_count": 57
+      },
+      {
+        "domain": "folk.app",
+        "type": "CORPORATE",
+        "retrieval_count": 80,
+        "citation_count": 54
+      },
+      {
+        "domain": "salesforce.com",
+        "type": "COMPETITOR",
+        "retrieval_count": 81,
+        "citation_count": 52
+      },
+      {
+        "domain": "zoominfo.com",
+        "type": "CORPORATE",
+        "retrieval_count": 51,
+        "citation_count": 34
+      },
+      {
+        "domain": "askelephant.ai",
+        "type": "CORPORATE",
+        "retrieval_count": 25,
+        "citation_count": 33
+      },
+      {
+        "domain": "5050growth.com",
+        "type": "CORPORATE",
+        "retrieval_count": 29,
+        "citation_count": 32
+      },
+      {
+        "domain": "pipedrive.com",
+        "type": "COMPETITOR",
+        "retrieval_count": 40,
+        "citation_count": 30
+      },
+      {
+        "domain": "simular.ai",
+        "type": "CORPORATE",
+        "retrieval_count": 27,
+        "citation_count": 28
+      },
+      {
+        "domain": "crm.org",
+        "type": "INSTITUTIONAL",
+        "retrieval_count": 12,
+        "citation_count": 28
+      },
+      {
+        "domain": "hightouch.com",
+        "type": "CORPORATE",
+        "retrieval_count": 15,
+        "citation_count": 26
+      },
+      {
+        "domain": "coffee.ai",
+        "type": "CORPORATE",
+        "retrieval_count": 33,
+        "citation_count": 25
+      }
+    ]
+  },
+  "tavily": {
+    "byPlatform": {
+      "reddit": [
+        {
+          "url": "https://www.reddit.com/r/startups/comments/1abc123/whats_your_tech_stack_for_a_10person_b2b_saas/",
+          "title": "What's your tech stack for a 10-person B2B SaaS?",
+          "content": "We're scaling fast and Salesforce feels like overkill. Looking for something modern that doesn't require a full-time admin. Tech stack so far: Linear for issues, Notion for docs, Slack for everything. CRM is the gap.",
+          "score": 0.92,
+          "published_date": "2026-04-22T14:00:00Z"
+        },
+        {
+          "url": "https://www.reddit.com/r/SaaS/comments/1def456/hubspot_alternatives_for_a_funded_seed_stage/",
+          "title": "HubSpot alternatives for a funded seed stage company",
+          "content": "Just raised our seed and the HubSpot quote came in at $1,800/month for the bare minimum. That's nuts. What are people using that's modern, fast, and doesn't lock you into a yearly contract?",
+          "score": 0.88,
+          "published_date": "2026-04-21T09:00:00Z"
+        },
+        {
+          "url": "https://www.reddit.com/r/sales/comments/1ghi789/sick_of_my_crm_taking_30_minutes_a_day/",
+          "title": "Sick of my CRM taking 30 minutes a day to update",
+          "content": "Every morning I spend 30 minutes copy-pasting from email into Salesforce. There has to be a better way. AI tools that actually update the CRM for you?",
+          "score": 0.85,
+          "published_date": "2026-04-20T07:30:00Z"
+        },
+        {
+          "url": "https://www.reddit.com/r/RevOps/comments/1jkl012/revops_stack_post_series_a/",
+          "title": "RevOps stack post Series A — what would you change?",
+          "content": "We just closed a $12M Series A and the existing CRM (Pipedrive) is creaking. We need something that scales but isn't Salesforce. Open to suggestions.",
+          "score": 0.83,
+          "published_date": "2026-04-23T11:00:00Z"
+        },
+        {
+          "url": "https://www.reddit.com/r/B2BSaaS/comments/1mno345/scaling_chaos_50_to_150_people/",
+          "title": "Scaling chaos — going from 50 to 150 people",
+          "content": "Hit 50 last quarter, hiring 100 more this year. Every system that worked at 20 is breaking. CRM, ATS, comp, you name it. What survives the 100-person threshold?",
+          "score": 0.81,
+          "published_date": "2026-04-19T16:30:00Z"
+        },
+        {
+          "url": "https://www.reddit.com/r/founders/comments/1pqr678/just_raised_seed_dont_buy_salesforce/",
+          "title": "Just raised seed — please don't buy Salesforce",
+          "content": "Watching another founder friend get sold a $50k Salesforce contract. They have 8 customers. Why does this keep happening?",
+          "score": 0.86,
+          "published_date": "2026-04-22T08:00:00Z"
+        },
+        {
+          "url": "https://www.reddit.com/r/startups/comments/1stu901/ai_writes_my_crm_updates_now/",
+          "title": "AI writes my CRM updates now — sharing the workflow",
+          "content": "Spent 3 weeks building this. Every meeting transcribed, every email parsed, CRM auto-fills. Saving ~7 hours/week per rep. Happy to share details.",
+          "score": 0.79,
+          "published_date": "2026-04-23T19:00:00Z"
+        }
+      ],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/posts/scott-martinis_on-crm-complexity-and-vibe-coding-your-own-activity-7388040482645368832-Klpl",
+          "title": "On CRM complexity and vibe-coding your own",
+          "content": "Spent the weekend trying to bend Salesforce to my will. 14 hours of clicks. Decided I'd rather vibe-code my own CRM in Lovable than touch another formula field. Anyone else done this?",
+          "score": 0.91,
+          "published_date": "2026-04-19T15:00:00Z"
+        },
+        {
+          "url": "https://www.linkedin.com/posts/joe-petruzzi-b2b6a29b_this-is-not-sponsored-but-attio-crm-is-absolutely-activity-7158620628458045440-96_O",
+          "title": "This is not sponsored, but Attio CRM is absolutely insane",
+          "content": "Migrated our entire pipeline over the weekend. The interface feels like it was designed in this decade. 21 of my reps replied saying they want to switch. The Salesforce/HubSpot duopoly cannot end soon enough.",
+          "score": 0.95,
+          "published_date": "2026-04-18T08:30:00Z"
+        },
+        {
+          "url": "https://www.linkedin.com/posts/founder-x_my-startup-just-hit-50-employees-and-everything-activity-7400000000000000000-aaaa",
+          "title": "My startup just hit 50 employees and everything is chaos",
+          "content": "Hiring is a blur. Our pipeline is a mess of tabs. Engineering is on Linear, Sales is on a spreadsheet, Marketing is on a different spreadsheet. We need to grow up — but I refuse to spend my Sunday in Salesforce admin land.",
+          "score": 0.87,
+          "published_date": "2026-04-22T17:00:00Z"
+        },
+        {
+          "url": "https://www.linkedin.com/posts/series-a-founder_just-closed-our-12m-series-a-10-things-activity-7401000000000000000-bbbb",
+          "title": "Just closed our $12M Series A. 10 things I wish I had known.",
+          "content": "1. Hire ops before sales. 2. Pick a CRM you can change in a week. 3. Don't sign a 3-year SaaS contract before PMF. 4. Your first RevOps hire is a force multiplier...",
+          "score": 0.9,
+          "published_date": "2026-04-20T11:00:00Z"
+        },
+        {
+          "url": "https://www.linkedin.com/posts/saas-vc_the-end-of-the-crm-monolith-activity-7402000000000000000-cccc",
+          "title": "The end of the CRM monolith",
+          "content": "Three founders this month told me their CRM is the worst tool in their stack. Not because of features — because it's a different design language than the rest of their software. Aesthetic is a buying signal now.",
+          "score": 0.84,
+          "published_date": "2026-04-21T14:00:00Z"
+        }
+      ],
+      "x": [
+        {
+          "url": "https://x.com/founder/status/1780000000000000000",
+          "title": "Unpopular opinion: Salesforce is the new legacy ERP",
+          "content": "Unpopular opinion: Salesforce is the new legacy ERP. The product hasn't shipped a usable feature in 10 years. The only reason it's still around is contractual lock-in. Cambrian moment for CRM is now.",
+          "score": 0.89,
+          "published_date": "2026-04-22T20:15:00Z"
+        },
+        {
+          "url": "https://x.com/founder/status/1781000000000000000",
+          "title": "POV: manually copy-pasting contacts between 4 apps",
+          "content": "POV: it's 2026 and you're manually copy-pasting contacts between 4 apps because your CRM was built in 2008.",
+          "score": 0.84,
+          "published_date": "2026-04-21T13:00:00Z"
+        },
+        {
+          "url": "https://x.com/builder/status/1782000000000000000",
+          "title": "Spent 4 hours setting up Salesforce. Still not working.",
+          "content": "Spent 4 hours setting up Salesforce. Still not working. Spent 12 minutes setting up Attio. Already shipping. The future is in modern tools.",
+          "score": 0.86,
+          "published_date": "2026-04-23T07:45:00Z"
+        },
+        {
+          "url": "https://x.com/revops/status/1783000000000000000",
+          "title": "AI agents are eating the SDR job",
+          "content": "AI agents are eating the SDR job and the CRM is the integration point. Whoever wins the modern, API-first CRM wins the next decade of B2B sales.",
+          "score": 0.82,
+          "published_date": "2026-04-19T22:00:00Z"
+        }
+      ]
+    }
+  },
+  "gemini": {
+    "voice": {
+      "summary": "Attio is witty, anti-enterprise, and builder-first. Plain language, never corporate.",
+      "traits": [
+        "witty",
+        "direct",
+        "opinionated",
+        "modern",
+        "design-led"
+      ],
+      "toneSpectrum": {
+        "formality": 28,
+        "technicality": 55,
+        "boldness": 75,
+        "humor": 60,
+        "warmth": 50
+      },
+      "signaturePhrases": [
+        "CRM that feels like the rest of your stack",
+        "designed in this decade",
+        "no admin required",
+        "built for the next generation of teams"
+      ],
+      "taboos": [
+        "never say 'synergy', 'leverage', or 'robust'",
+        "never use enterprise jargon ('solution', 'stakeholder')",
+        "never sound like Salesforce"
+      ],
+      "engagementStyle": "Helpful first, opinionated second. Drops a specific, builder-flavored take. Mentions the brand only when it directly answers the question.",
+      "brandContextSummary": "Modern, design-led CRM positioned against Salesforce/HubSpot. Used by Modal, Replicate, Vercel, Granola. Strength: speed of setup, customizable data model, modern UI. Pricing transparent and developer-friendly."
+    }
+  }
+}

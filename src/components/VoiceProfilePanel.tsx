@@ -8,111 +8,139 @@ export function VoiceProfilePanel({
   voice: VoiceProfile;
   topDomains: PeecDomainReportRow[];
 }) {
-  const ugc = topDomains.filter((d) => d.type === 'UGC').slice(0, 3);
+  const ugc = topDomains.filter((d) => d.type === 'UGC').slice(0, 4);
   return (
-    <aside className="flex flex-col gap-4 sticky top-[72px]">
-      <div className="peec-card p-4">
-        <div className="flex items-center justify-between mb-1">
-          <h2 className="t-h3">Brand voice</h2>
+    <aside className="flex flex-col gap-3 sticky top-[60px] max-h-[calc(100vh-72px)] overflow-y-auto pr-0.5">
+      <div className="peec-card overflow-hidden">
+        <div className="peec-section-head">
+          <h2 className="t-h4">Brand voice</h2>
+          <span
+            className="peec-eyebrow"
+            style={{ color: 'var(--peec-fg-tertiary)' }}
+          >
+            Context agent
+          </span>
         </div>
-        <p className="t-caption mb-3" style={{ color: 'var(--peec-fg-tertiary)' }}>
-          Brand Context Agent · system-prompt anchor
-        </p>
+        <div className="px-3 py-3">
+          <p
+            className="text-[12.5px] leading-[18px] mb-2.5"
+            style={{ color: 'var(--peec-fg-primary)', letterSpacing: '-0.065px' }}
+          >
+            {voice.summary}
+          </p>
 
-        <p className="t-body-s mb-3" style={{ color: 'var(--peec-fg-primary)' }}>
-          {voice.summary}
-        </p>
-
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {voice.traits.map((t) => (
-            <span
-              key={t}
-              className="peec-pill"
-              style={{
-                background: 'var(--peec-bg-secondary)',
-                color: 'var(--peec-fg-primary)',
-                borderColor: 'transparent',
-                fontSize: 11,
-                padding: '2px 8px',
-              }}
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-
-        <h3 className="t-h4 mb-2">Tone</h3>
-        <div className="flex flex-col gap-2 mb-4">
-          {Object.entries(voice.toneSpectrum).map(([k, v]) => (
-            <ToneBar key={k} label={k} value={v} />
-          ))}
-        </div>
-
-        <h3 className="t-h4 mb-2">Signature phrases</h3>
-        <ul className="flex flex-col gap-1 mb-4">
-          {voice.signaturePhrases.map((p) => (
-            <li
-              key={p}
-              className="t-body-s"
-              style={{ color: 'var(--peec-fg-secondary)' }}
-            >
-              "{p}"
-            </li>
-          ))}
-        </ul>
-
-        <h3 className="t-h4 mb-2">Brand context</h3>
-        <p className="t-body-s" style={{ color: 'var(--peec-fg-secondary)' }}>
-          {voice.brandContextSummary}
-        </p>
-      </div>
-
-      <div className="peec-card p-4">
-        <div className="flex items-center justify-between mb-1">
-          <h2 className="t-h3">Where AI cites you</h2>
-        </div>
-        <p className="t-caption mb-3" style={{ color: 'var(--peec-fg-tertiary)' }}>
-          Top user-generated domains feeding AI engines
-        </p>
-        <div className="flex flex-col gap-2">
-          {ugc.map((d) => (
-            <div key={d.domain} className="flex items-center justify-between">
-              <span className="t-body-s">{d.domain}</span>
+          <div className="flex flex-wrap gap-1 mb-3">
+            {voice.traits.slice(0, 5).map((t) => (
               <span
-                className="t-caption"
-                style={{ color: 'var(--peec-fg-secondary)', fontVariantNumeric: 'tabular-nums' }}
+                key={t}
+                className="peec-pill"
+                style={{
+                  background: 'var(--peec-bg-secondary)',
+                  color: 'var(--peec-fg-primary)',
+                  borderColor: 'transparent',
+                  fontSize: 10.5,
+                  padding: '1px 7px',
+                  fontWeight: 500,
+                }}
               >
-                {d.citation_count} citations
+                {t}
               </span>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="peec-divider mb-3" />
+
+          <div className="peec-eyebrow mb-2">Tone</div>
+          <div className="flex flex-col gap-1.5 mb-3">
+            {Object.entries(voice.toneSpectrum).map(([k, v]) => (
+              <ToneBar key={k} label={k} value={v} />
+            ))}
+          </div>
+
+          <div className="peec-divider mb-3" />
+
+          <div className="peec-eyebrow mb-2">Signature phrases</div>
+          <ul className="flex flex-col gap-1 mb-3">
+            {voice.signaturePhrases.slice(0, 3).map((p) => (
+              <li
+                key={p}
+                className="text-[12px] leading-[16px] italic"
+                style={{ color: 'var(--peec-fg-secondary)', letterSpacing: '-0.05px' }}
+              >
+                "{p}"
+              </li>
+            ))}
+          </ul>
+
+          <div className="peec-divider mb-3" />
+
+          <div className="peec-eyebrow mb-2">Brand context</div>
+          <p
+            className="text-[12px] leading-[16px]"
+            style={{ color: 'var(--peec-fg-secondary)', letterSpacing: '-0.05px' }}
+          >
+            {voice.brandContextSummary}
+          </p>
         </div>
       </div>
+
+      {ugc.length > 0 && (
+        <div className="peec-card overflow-hidden">
+          <div className="peec-section-head">
+            <h2 className="t-h4">Where AI cites you</h2>
+            <span
+              className="peec-eyebrow"
+              style={{ color: 'var(--peec-fg-tertiary)' }}
+            >
+              UGC sources
+            </span>
+          </div>
+          <div className="flex flex-col">
+            {ugc.map((d, i) => (
+              <div
+                key={d.domain}
+                className="flex items-center justify-between px-3 py-2 transition-colors hover:bg-[var(--peec-table-hover)]"
+                style={{
+                  borderTop: i === 0 ? 'none' : '1px solid var(--peec-separator-primary)',
+                }}
+              >
+                <span className="t-body-s truncate">{d.domain}</span>
+                <span
+                  className="text-[11px] tabular-nums font-medium"
+                  style={{ color: 'var(--peec-fg-tertiary)' }}
+                >
+                  {d.citation_count}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
 
 function ToneBar({ label, value }: { label: string; value: number }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2.5">
       <span
-        className="t-caption capitalize"
-        style={{ color: 'var(--peec-fg-secondary)', minWidth: 78 }}
+        className="text-[11px] capitalize font-medium"
+        style={{ color: 'var(--peec-fg-secondary)', minWidth: 70 }}
       >
         {label}
       </span>
       <div
-        className="flex-1 h-1.5 rounded-full overflow-hidden"
+        className="flex-1 h-1 rounded-full overflow-hidden"
         style={{ background: 'var(--peec-bg-tertiary)' }}
       >
         <div
-          className="h-full rounded-full"
+          className="h-full rounded-full transition-[width] duration-500"
           style={{ width: `${value}%`, background: 'var(--peec-bg-black)' }}
         />
       </div>
       <span
-        className="t-caption"
-        style={{ color: 'var(--peec-fg-tertiary)', minWidth: 24, textAlign: 'right' }}
+        className="text-[10.5px] tabular-nums font-medium"
+        style={{ color: 'var(--peec-fg-tertiary)', minWidth: 22, textAlign: 'right' }}
       >
         {value}
       </span>
