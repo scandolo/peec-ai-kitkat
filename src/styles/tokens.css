@@ -1,0 +1,106 @@
+/* Peec AI design tokens — extracted from app.peec.ai. See .claude/commands/design-system.md */
+
+:root {
+  /* Foreground */
+  --peec-fg-primary: #171717;
+  --peec-fg-secondary: #17171799;
+  --peec-fg-tertiary: #17171780;
+  --peec-fg-quaternary: #17171766;
+  --peec-fg-primary-white: #fdfdfd;
+  --peec-fg-secondary-white: #fdfdfda3;
+
+  /* Background */
+  --peec-bg-primary: #1717170a;
+  --peec-bg-secondary: #1717170f;
+  --peec-bg-tertiary: #17171714;
+  --peec-bg-quaternary: #1717171a;
+  --peec-bg-black: #171717;
+  --peec-bg-white: #fdfdfd;
+  --peec-input-bg: #fdfdfd;
+
+  /* Surface & Stroke */
+  --peec-surface-primary: transparent;
+  --peec-surface-secondary: #1717170a;
+  --peec-surface-tertiary: #1717170f;
+  --peec-stroke-primary: #17171714;
+  --peec-stroke-secondary: #1717171a;
+  --peec-stroke-tertiary: #1717171f;
+  --peec-stroke-quaternary: #17171729;
+  --peec-separator-primary: #1717170f;
+  --peec-separator-secondary: #17171714;
+
+  /* Semantic */
+  --peec-success-base: #00a63e;
+  --peec-error-base: #fb2c36;
+  --peec-warning-primary: #ff6900;
+  --peec-feature-base: #ad46ff;
+  --peec-feature-2-base: #2b7fff;
+  --peec-highlight-base: #f6339a;
+
+  /* Table states */
+  --peec-table-hover: #f6f6f6;
+  --peec-table-active: #ececec;
+  --peec-table-selected: #e8ecfe;
+
+  /* Shadows (with signature 1px ring) */
+  --peec-shadow-2xs: 0px 1px 0px 0px #17171714, 0px 0px 0px 1px #1717170f;
+  --peec-shadow-xs: 0px 1px 2px 0px #17171714, 0px 0px 0px 1px #1717170f;
+  --peec-shadow-sm: 0px 1px 2px -1px #17171714, 0px 1px 3px 0px #17171714, 0px 0px 0px 1px #1717170f;
+  --peec-shadow-md: 0px 2px 4px -2px #1717171a, 0px 4px 6px -1px #17171714, 0px 0px 0px 1px #17171714;
+  --peec-shadow-lg: 0px 4px 6px -4px #1717171a, 0px 10px 15px -3px #17171714, 0px 0px 0px 1px #17171714;
+  --peec-shadow-xl: 0px 8px 10px -6px #1717171a, 0px 20px 25px -5px #17171714, 0px 0px 0px 1px #17171714;
+  --peec-shadow-2xl: 0px 32px 56px -12px #1717171a, 0px 25px 50px -12px #17171714, 0px 0px 0px 1px #17171714;
+
+  /* Button shadows */
+  --peec-shadow-btn-primary: inset 0 0 0 1px #17171700, 0px 1px 3px 0px #1717170f, 0 0 0 1px #17171714;
+  --peec-shadow-btn-inverse: inset 0 0 0 1px #fdfdfd1f, 0 1px 3px 0 #1717170f, 0 0 0 1px #171717;
+
+  /* Radii */
+  --peec-radius-sm: 6px;
+  --peec-radius-md: 8px;
+  --peec-radius-lg: 12px;
+  --peec-radius-xl: 14px;
+  --peec-radius-pill: 9999px;
+
+  /* Type */
+  --peec-font-sans: 'Geist', 'Geist Variable', system-ui, -apple-system, sans-serif;
+  --peec-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+/* Badge palette — bg/border at 10% alpha, text at full */
+:root {
+  --peec-badge-orange-text: #ff6900;
+  --peec-badge-orange-bg: #ff69001a;
+  --peec-badge-red-text: #e7000b;
+  --peec-badge-red-bg: #e7000b1a;
+  --peec-badge-amber-text: #e17100;
+  --peec-badge-amber-bg: #e171001a;
+  --peec-badge-yellow-text: #d08700;
+  --peec-badge-yellow-bg: #f0b1001a;
+  --peec-badge-lime-text: #5ea500;
+  --peec-badge-lime-bg: #5ea5001a;
+  --peec-badge-green-text: #00a63e;
+  --peec-badge-green-bg: #00a63e1a;
+  --peec-badge-emerald-text: #009966;
+  --peec-badge-emerald-bg: #0099661a;
+  --peec-badge-blue-text: #2b7fff;
+  --peec-badge-blue-bg: #155dfc1a;
+  --peec-badge-cyan-text: #0092b8;
+  --peec-badge-cyan-bg: #0092b81a;
+  --peec-badge-sky-text: #0084d1;
+  --peec-badge-sky-bg: #0084d11a;
+  --peec-badge-teal-text: #009689;
+  --peec-badge-teal-bg: #0096891a;
+  --peec-badge-indigo-text: #4f39f6;
+  --peec-badge-indigo-bg: #4f39f61a;
+  --peec-badge-violet-text: #7f22fe;
+  --peec-badge-violet-bg: #7f22fe1a;
+  --peec-badge-purple-text: #9810fa;
+  --peec-badge-purple-bg: #9810fa1a;
+  --peec-badge-fuchsia-text: #c800de;
+  --peec-badge-fuchsia-bg: #c800de1a;
+  --peec-badge-pink-text: #e60076;
+  --peec-badge-pink-bg: #e600761a;
+  --peec-badge-rose-text: #ec003f;
+  --peec-badge-rose-bg: #ec003f1a;
+}

@@ -1,171 +1,207 @@
 # Plan: SWARM — Conquer Every Conversation
 
 ## Context
-Hackathon project for Big Berlin Hack 2026, Peec AI track (2,500 EUR). The challenge: help an early-stage brand win distribution against bigger competitors. 
+Hackathon project for Big Berlin Hack 2026, Peec AI track (2,500 EUR). The challenge: help an early-stage brand win distribution against bigger competitors.
 
-**Previous concept** (citation inbox) was too close to what Peec already does. The new direction is offensive — not monitoring, but conquering.
+**Thesis**: Peec is the scoreboard. SWARM is the offense. AI engines learn from the internet — LinkedIn, Reddit, X, blogs. If your brand isn't in those conversations, you're invisible to the next generation of buyers. SWARM gets a 3-person marketing team into every conversation that moves the Peec scoreboard.
 
-**Thesis**: "Go where the attention is." Content and search are increasingly filtered by LLMs and algorithms. A 3-person marketing team can't compete with HubSpot's army — but an AI tool can make those 3 people omnipresent, like Duolingo's social team but powered by AI.
+**Counter-positioning vs Peec's existing recommendations feature**: Peec already surfaces "get featured here" suggestions but they are static, surface-level, not agentic, and stop short. They don't quantify the visibility lift, don't tell you HOW to engage, and don't drive a next step. **That gap is the product.**
 
 ---
 
 ## Product: SWARM
 
-**One-liner**: Find every conversation on the internet where your brand should show up — obvious and non-obvious — and help your team engage in your brand's authentic voice.
+**One-liner**: Three always-on AI agents that find every conversation where your brand should show up — quantify the visibility lift in Peec's terms — and hand your team a voice-aware draft scaffold to ship.
 
-**The Duolingo insight**: Duolingo doesn't just comment on language-learning posts. They comment on breakup posts, gym posts, memes. The brand IS the presence. SWARM gives any early-stage brand that same omnipresence.
+**Demo line**: "HubSpot has 78% AI search visibility. Attio has 33%. HubSpot has 200 marketers. Attio has 5. How do 5 people compete? They don't. They SWARM."
 
-### Core Loop
-1. **Peec AI** shows which topics you're invisible on in AI search → strategic intelligence
-2. **Tavily** searches LinkedIn, Reddit, X for live conversations about those topics (and adjacent/cultural ones)
-3. **Gemini** scores relevance (including non-obvious connections) and learns your brand voice
-4. Team sees an **opportunity feed** → picks conversations → gets voice-aware draft replies → engages
+---
 
-### The Flywheel
+## Architecture: Three Always-On Agents
+
+Every agent below must trace its output to a quantitative Peec metric. If a feature can't, cut it.
+
+### Agent 1 — Trends Agent (weekly deep research)
+- Runs weekly. Crawls world-level + niche-level trends to find where mass attention is heading.
+- Output: a ranked list of emerging topics with a forward-looking Peec angle: *"If you publish on this in the next 7 days, expected lift on topic 'Revenue Operations' = +N pp visibility."*
+- Why this isn't generic social listening: each trend is scored against the brand's Peec topic gap profile. We only surface trends that move a measured weakness.
+
+### Agent 2 — Brand Context RAG (every mention of us, ever)
+- Crawls every public mention of the brand across the web (own content, press, podcasts, founder posts, customer reviews, Reddit threads).
+- Builds an embedded context layer the system can RAG into.
+- Powers two things:
+  1. **Voice grounding** — feeds every Gemini prompt as system-prompt anchor (we are NOT generating polished drafts cold; voice profile is always in context).
+  2. **Positioning grounding** — when generating a reply, the agent retrieves the most relevant brand evidence (case studies, real claims, real wording) so suggested angles are factually true and on-message.
+
+### Agent 3 — Conversation Interception (real-time)
+- Triggered by Peec visibility gaps. Watches LinkedIn, Reddit, X for live conversations on weak topics, on competitor mentions, and on adjacent/cultural pain points.
+- Each opportunity card carries a quantitative Peec impact estimate ("engaging here moves 'CRM Automation' visibility by ~X pp at scale Y") and a draft scaffold in brand voice.
+- This is the daily driver. The Radar.
+
+---
+
+## The Flywheel
+
 ```
-Peec detects invisibility → SWARM finds conversations → Team engages → 
-More brand mentions online → AI engines pick them up → Peec shows improved visibility → repeat
+Peec detects invisibility → Trends agent picks high-leverage topics →
+Conversation agent finds live posts on those topics →
+Brand Context RAG grounds the engagement →
+Team ships in the brand's voice →
+More mentions in places AI engines crawl →
+Peec visibility goes up → loop tightens
 ```
 
 ---
 
 ## UX Flow
 
-### Screen 1: Brand Setup (one-time)
+### Screen 1: Brand Setup (one-time, run *before* demo)
 - Brand name, domain, 2-3 competitors
-- Links for voice learning: website URL, founder LinkedIn, 2-5 sample social posts
-- On submit: Peec AI pulls visibility data + Gemini builds Brand Voice Profile
+- Sources for voice + context: website URL, founder LinkedIn, sample posts, blog
+- On submit: Peec data pulled + Brand Context RAG indexed + Voice Profile extracted
+- **Latency note**: this is slow (~2-3 min). We do NOT demo this live. Demo opens on screen 2 with pre-built state, then narrates "this ran overnight."
 
-### Screen 2: The Radar (daily driver)
+### Screen 2: The Radar (daily driver, demo opens here)
 
-**Top bar — Visibility Gaps (from Peec AI)**
+**Top bar — Visibility Gaps (Peec data)**
 ```
-[CRM Automation: 18% visible] [AI in Sales: 22%] [Revenue Ops: 15%]
+[CRM Automation: 18%] [AI in Sales: 22%] [Revenue Ops: 15%]
 ```
-These are topics where Peec shows you're losing. They act as filters.
+Topic chips, click to filter the feed. Anchored to Peec's actual topic IDs.
+
+**Left rail — Trends Agent panel**
+- This week's surfaced trends, each with: trend description, related Peec topic, expected lift, "find conversations on this trend" button.
 
 **Main feed — Conversation Cards**
 Each card:
 - Platform icon (LinkedIn / Reddit / X)
-- Post title/first line + author
-- Relevance score (0-100) with color
-- Connection type badge: `DIRECT` / `ADJACENT` / `CULTURAL`
-- Peec insight: "You're invisible for 'CRM Automation' — this post has 847 views discussing exactly that"
-- "Draft Reply" button
+- Post title, first line, author, timestamp
+- Relevance score 0-100 with color
+- Connection badge: `DIRECT` / `ADJACENT` / `CULTURAL`
+- **Peec insight** (the SWARM differentiator vs Peec's static suggestions): "You are invisible for 'CRM Automation'. This thread has 847 views. Engaging here is estimated to lift visibility on this topic by ~X pp."
+- "Open draft" button
 
 **Right sidebar — Brand Voice Profile**
 - Voice summary: "Witty, anti-enterprise, builder-first"
 - Tone sliders (formal↔casual, technical↔accessible, bold↔measured)
-- Signature phrases extracted from brand content
+- Signature phrases extracted from brand corpus
+- "Brand context" section — recent mentions ingested, sample positioning extracts (proof the RAG layer is alive)
 
 ### Screen 3: Draft & Deploy (expand a card)
-- Full original post on left
-- Editable AI draft on right (in brand voice)
-- "Why this opportunity?" explanation linking Peec data to this post
-- Regenerate with tone options: "Bolder" / "More technical" / "Shorter"
-- "Copy to clipboard" + "Open original post" → human-in-the-loop
+- Original post on the left
+- Editable draft scaffold on the right (in brand voice)
+  - **NOT a press-send full message.** A scaffold: opener, angle, supporting line, CTA — each editable.
+  - 3 angle options below ("Bolder" / "More technical" / "Shorter")
+  - "Why this opportunity?" panel linking the Peec gap to this post and citing Brand Context RAG evidence
+- "Copy to clipboard" + "Open original" → human-in-the-loop ships it
+
+---
+
+## Voice Engine — honest framing
+
+We are NOT trusting AI to write the final message. The Brand Voice Profile feeds the **system prompt** of every generation call. Output is a **scaffold**, not a finished message. Reframe the value: "SWARM gets you 80% of the way — opener right, angle right, voice right. Human ships."
+
+This is more honest, more sellable, and avoids the live-demo embarrassment of an obviously-AI reply. If Gemini surprises us during build we can dial autonomy up. Start cautious.
 
 ---
 
 ## Discovery Engine
 
-### How it finds conversations
+### Step 1 — Peec → strategic intelligence
+- `/reports/brands` → visibility, share of voice, sentiment, position
+- `/topics` + `/prompts` → topics where we're weak + the actual prompts buyers ask AI engines
+- `/reports/domains` → top cited domains (proof Reddit, LinkedIn matter for AI citations)
 
-**Step 1**: Peec AI → extract topics where brand is weak, plus the actual prompts people ask AI engines
-
-**Step 2**: Gemini generates search queries in 3 tiers:
-- **DIRECT**: "best CRM automation tool 2026", "HubSpot alternatives"
+### Step 2 — Gemini → query generation in 3 tiers
+- **DIRECT**: "best CRM 2026", "HubSpot alternatives"
 - **ADJACENT**: "sales pipeline frustration", "startup scaling chaos"
 - **CULTURAL**: "spreadsheet CRM horror story", "enterprise software is ugly"
 
-**Step 3**: Tavily searches across platforms:
+### Step 3 — Tavily → multi-platform search behind a cache layer
 ```
-tavily.search(query, include_domains=["linkedin.com"], time_range="week", search_depth="advanced")
-tavily.search(query, include_domains=["reddit.com"], time_range="week")
-tavily.search(query, include_domains=["x.com"], time_range="week")
+tavilySearch(query, { include_domains: ["reddit.com"], time_range: "week" })  // LIVE
+tavilySearch(query, { include_domains: ["linkedin.com"], cache: "hot" })       // PRE-CACHED
+tavilySearch(query, { include_domains: ["x.com"], cache: "hot" })               // PRE-CACHED
 ```
+Cache layer makes the same code path serve live or replayed. Demo flips between live (Reddit) and cached (LinkedIn/X) without the user knowing.
 
-**Step 4**: Gemini scores each result (0-100) on relevance, reach potential, engagement fit
+### Step 4 — Gemini → batch relevance scoring (0-100) + Peec impact estimate per result
 
-### 5 Non-Obvious Examples for Attio
+### 5 Demo-ready Examples (Attio)
 
 | Post | Platform | Type | Why |
 |------|----------|------|-----|
-| "My startup just hit 50 employees and everything is chaos" | LinkedIn | CULTURAL | Scaling pain = CRM pain. Invisible for "Product-Led Growth" topic |
-| "Unpopular opinion: Salesforce is the new legacy ERP" | X | ADJACENT | Anti-enterprise sentiment = Attio's positioning |
-| "What's your tech stack for a 10-person B2B SaaS?" | Reddit | DIRECT | Tech stack threads get cited by AI engines (reddit.com = 82 citations) |
-| "We just raised our Series A. 10 things I wish I'd known" | LinkedIn | CULTURAL | Post-raise = need real CRM. Invisible for "Revenue Ops" |
-| "POV: manually copy-pasting contacts between 4 apps" | X | CULTURAL | Meme about data integration pain = Attio's value prop |
-
----
-
-## Brand Voice Engine
-
-### Learning the voice
-Feed Gemini: website copy (via Tavily extract) + founder LinkedIn + sample posts → outputs a Brand Voice Profile:
-- Personality traits, tone spectrum (formality, technicality, boldness, humor, warmth)
-- Signature phrases, vocabulary preferences, engagement style, taboos
-
-### Generating drafts
-Each draft prompt includes the full voice profile + platform rules:
-- **LinkedIn**: Professional but human, 2-5 sentences, value-first
-- **Reddit**: Match subreddit tone, be helpful first, mention brand naturally alongside alternatives
-- **X**: Under 280 chars, punchy, personality-forward
+| "My startup just hit 50 employees and everything is chaos" | LinkedIn | CULTURAL | Scaling pain = CRM pain. Hits 'Product-Led Growth' gap. |
+| "Unpopular opinion: Salesforce is the new legacy ERP" | X | ADJACENT | Anti-enterprise sentiment = Attio's positioning. |
+| "What's your tech stack for a 10-person B2B SaaS?" | Reddit | DIRECT | Reddit threads get cited by AI engines (reddit.com = 82 citations in Peec). |
+| "Just raised our Series A. 10 things I wish I'd known" | LinkedIn | CULTURAL | Post-raise = need real CRM. Hits 'Revenue Ops' gap. |
+| "POV: manually copy-pasting contacts between 4 apps" | X | CULTURAL | Meme about data integration = Attio's value prop. |
 
 ---
 
 ## Platform Strategy
 
-| Platform | What SWARM surfaces | Engagement style |
-|----------|-------------------|-----------------|
-| **LinkedIn** | Thought leader posts, hot takes about enterprise SW, founder journey posts, polls, funding announcements | Substantive comments, first-person perspective, data-driven takes |
-| **Reddit** | r/startups, r/SaaS, r/sales recommendation threads, competitor complaint threads, "what's your stack" threads | Casual, helpful, mention brand alongside alternatives, transparent about affiliation |
-| **X** | Hot takes, memes about workflow pain, conference commentary, competitor announcements | Under 280 chars, witty, personality-forward, meme-aware |
+| Platform | What SWARM surfaces | Live or cached | Engagement style |
+|----------|---------------------|----------------|------------------|
+| **Reddit** | r/startups, r/SaaS, r/sales recommendation threads, competitor complaint threads | **Live** (Tavily handles Reddit well) | Casual, helpful, mention brand alongside alternatives |
+| **LinkedIn** | Founder posts, hot takes, funding announcements | **Pre-cached** (Tavily LinkedIn coverage is uneven) | Substantive, first-person, data-driven |
+| **X** | Hot takes, memes about workflow pain, conference commentary | **Pre-cached** | Under 280 chars, witty, personality-forward |
 
 ---
 
 ## Technical Architecture
 
-### No backend — all client-side for hackathon speed
+No backend — all client-side. API keys in Vite env vars (fine for demo).
+
 ```
 React Frontend
   ├── Peec AI REST API (X-API-Key auth)
-  ├── Tavily Search API
+  ├── Tavily Search API (with hot cache layer)
   └── Google Gemini API
 ```
-
-API keys in Vite env vars. Fine for demo.
 
 ### File structure
 ```
 src/
   services/
-    peec.ts          — Peec AI client (visibility gaps, topics, prompts, domains)
-    tavily.ts        — Tavily client (platform search)
-    gemini.ts        — Gemini client (query gen, scoring, voice analysis, drafts)
-    discovery.ts     — Orchestrator: Peec → queries → Tavily → scoring → feed
+    peec.ts          — Peec REST client
+    tavily.ts        — Tavily client + cache layer
+    gemini.ts        — Gemini client (queries, scoring, voice, drafts)
+    discovery.ts     — Three-agent orchestrator
+    cache.ts         — Hot cache for pre-computed Tavily/Gemini results
+  agents/
+    trends.ts        — Weekly trends agent
+    context.ts       — Brand context RAG (build + retrieve)
+    interception.ts  — Conversation interception
   components/
-    BrandSetup.tsx   — One-time onboarding
-    Radar.tsx        — Main feed dashboard
-    VisibilityBar.tsx — Peec AI topic gap pills
-    ConversationCard.tsx — Opportunity card
-    DraftPanel.tsx   — Expanded draft view
-    VoiceProfile.tsx — Brand voice sidebar
+    BrandSetup.tsx
+    Radar.tsx
+    VisibilityBar.tsx
+    TrendsRail.tsx
+    ConversationCard.tsx
+    DraftPanel.tsx
+    VoiceProfile.tsx
+  data/
+    attio-cache.json — Pre-computed demo seed
   types/index.ts
   App.tsx
 ```
 
-### API call flow per refresh
-1. Peec AI: `/reports/brands`, `/topics`, `/prompts`, `/reports/domains` → 4-5 calls
-2. Gemini: generate search queries from Peec data → 1 call
-3. Tavily: 10-15 parallel searches (3 platforms × 5 topics) → 15 calls
-4. Gemini: batch-score all results → 1 call
-5. Gemini: generate draft on demand (user clicks) → 1 call per draft
-
-Total: ~20 calls, most parallel. 5-10 seconds.
+### Performance plan
+- Demo opens on **pre-built Radar state** (loaded from `attio-cache.json`)
+- One live moment in the demo: click "Regenerate" on a draft → real Gemini call (~2s, feels intentional)
+- Optional "Refresh" button runs 1-2 fresh Tavily queries with shimmer loading
 
 ### Key data types
 ```typescript
+interface VisibilityGap {
+  topicId: string;
+  topicName: string;
+  visibility: number;        // 0-100, current Peec visibility
+  competitorAvg: number;     // 0-100, what competitors hit
+  shareOfVoice: number;
+}
+
 interface ConversationOpportunity {
   id: string;
   platform: 'linkedin' | 'reddit' | 'x';
@@ -173,19 +209,41 @@ interface ConversationOpportunity {
   title: string;
   content: string;
   author: string;
-  relevanceScore: number;
+  publishedAt: string;
+  relevanceScore: number;          // 0-100 from Gemini
   connectionType: 'direct' | 'adjacent' | 'cultural';
-  peecInsight: string;
-  suggestedAngle: string;
-  relatedTopic: VisibilityGap;
+  relatedTopicId: string;          // ties back to Peec topic
+  peecInsight: string;             // human-readable
+  estimatedVisibilityLift: number; // pp lift if we engage at scale
+  draftScaffold?: DraftScaffold;
+}
+
+interface DraftScaffold {
+  opener: string;
+  angle: string;
+  supporting: string;
+  cta: string;
+  alternates: { bolder: string; technical: string; shorter: string };
 }
 
 interface VoiceProfile {
   summary: string;
   traits: string[];
-  toneSpectrum: { formality: number; technicality: number; boldness: number; humor: number; warmth: number; };
+  toneSpectrum: { formality: number; technicality: number; boldness: number; humor: number; warmth: number };
   signaturePhrases: string[];
+  taboos: string[];
   engagementStyle: string;
+  brandContextSummary: string;     // RAG-derived positioning summary
+}
+
+interface Trend {
+  id: string;
+  title: string;
+  description: string;
+  surface: 'world' | 'niche';
+  relatedTopicId: string;          // Peec topic
+  expectedLiftPp: number;
+  evidence: string[];              // URLs Tavily found
 }
 ```
 
@@ -193,72 +251,68 @@ interface VoiceProfile {
 
 ## Partner Tech (3 required)
 
-1. **Google DeepMind (Gemini)** — AI backbone: query generation, relevance scoring, voice learning, draft generation
-2. **Tavily** — Discovery engine: search LinkedIn, Reddit, X for live conversations
-3. **Entire** — Agent traceability: install CLI, capture all AI agent sessions during build. Show in demo: "You can trace every decision back through Entire."
+1. **Google DeepMind (Gemini)** — query generation, relevance scoring, voice extraction, draft scaffolds, trend summarization
+2. **Tavily** — discovery engine (Reddit live, LinkedIn/X pre-cached)
+3. **Lovable** — used for UI iteration during build (we will iterate the Radar UI in Lovable, then port the polished components)
 
-**Side challenge**: Connect repo to Aikido for "Most Secure Build" (free 1,000 EUR)
+**Side challenge**: Aikido for "Most Secure Build" (free 1,000 EUR) — connect repo before demo
 
 ---
 
-## Demo Flow (2 minutes)
+## Demo Flow (target 1:45, hard cap 2:00)
 
 **[0:00-0:15] Hook**
 "HubSpot has 78% AI search visibility. Attio has 33%. HubSpot has 200 marketers. Attio has 5. How do 5 people compete? They don't. They SWARM."
 
-**[0:15-0:35] Problem**
-"AI engines learn what to recommend from the internet — LinkedIn posts, Reddit threads, blog comments. If your brand isn't in those conversations, you're invisible to AI. And invisible to the next generation of buyers."
-*Show Peec AI data: Attio's low visibility, top cited domains (reddit.com, linkedin.com)*
+**[0:15-0:35] Problem framing — Peec is the scoreboard**
+"Peec AI shows you which AI search topics you're losing. It even suggests where to engage. But it stops there — no impact estimate, no draft, no next step."
+*Show real Peec data screenshot: Attio's low visibility, top cited domains.*
 
-**[0:35-0:55] Product**
-"SWARM connects Peec AI's visibility intelligence to live conversations across the internet. It finds every post where your brand should be — and drafts replies in your brand's actual voice."
-*Show the Radar feed. Scroll through cards.*
+**[0:35-1:05] Product reveal — three agents working for you**
+"SWARM picks up where Peec stops. Three always-on agents."
+*Open the Radar (pre-built). Quick narrate:*
+- Trends rail: "this week, your weak topics are trending — here's where attention is heading."
+- Visibility gap pills (Peec data live).
+- Feed of conversations.
+- Voice profile sidebar with brand context.
 
-**[0:55-1:15] The Non-Obvious Magic**
-"But here's what makes SWARM different. It doesn't just find CRM posts. It finds THIS —"
-*Show LinkedIn post about startup hitting 50 employees. Badge: CULTURAL. Peec insight: "You're invisible for 'Product-Led Growth.' This founder's scaling pain is your market."*
-"— and generates THIS."
-*Show draft in Attio's voice. Highlight Voice Profile sidebar.*
+**[1:05-1:30] The non-obvious magic + Peec quantification**
+"It doesn't just find CRM posts. It finds THIS —"
+*LinkedIn 50-employees post. CULTURAL badge. Peec insight: "Engaging here is estimated to lift 'Product-Led Growth' visibility by ~3pp."*
+"— and generates THIS scaffold in Attio's voice."
+*Click "Regenerate" — live Gemini call. ~2s.*
 
-**[1:15-1:35] The Flywheel**
-"The intelligence layer is Peec AI. It shows which topics you're losing. SWARM finds the conversations. Your team engages. Those engagements become content AI engines learn from. Your visibility goes up. It's a flywheel."
-*Show simple animated diagram of the loop.*
-
-**[1:35-1:55] Real Results**
-"We ran SWARM for Attio this morning. 47 conversations across LinkedIn, Reddit, and X."
-*Show 3 real, timestamped results. One direct, one adjacent, one cultural. Each with a draft.*
-
-**[1:55-2:00] Close**
-"Three marketers. Every conversation. SWARM."
+**[1:30-1:45] Flywheel + Close**
+"Peec measures. SWARM moves the number. Three marketers, every conversation. SWARM."
 
 ---
 
-## Build Sequence
+## Build Sequence (Saturday + Sunday morning)
 
-### Saturday morning: Core pipeline
-- [ ] Scaffold React + Vite project
-- [ ] Build `peec.ts` — fetch visibility gaps, topics, prompts
-- [ ] Build `gemini.ts` — query generation, scoring, voice analysis, drafts
-- [ ] Build `tavily.ts` — platform search
-- [ ] Build `discovery.ts` — orchestrator connecting all three
-- [ ] Pre-process Attio dataset + curate 10-15 great examples
+### Saturday morning — pipeline
+- [ ] Scaffold Vite + React + TS with Peec design tokens
+- [ ] `peec.ts` (Daavid) — fetch visibility gaps, topics, prompts, top domains using Attio project IDs
+- [ ] `gemini.ts` (Scando) — queries, scoring, voice extraction, draft scaffolds
+- [ ] `tavily.ts` (Muna) — search wrapper + cache layer
+- [ ] `discovery.ts` — orchestrator wiring three agents
+- [ ] Pre-process Attio dataset → curate 15 great cards into `attio-cache.json`
 
-### Saturday afternoon: Frontend
-- [ ] Build Radar feed with ConversationCards
-- [ ] Build DraftPanel with voice-aware generation
-- [ ] Build VisibilityBar with Peec AI data
-- [ ] Build VoiceProfile sidebar
+### Saturday afternoon — UI
+- [ ] Radar feed + ConversationCard + VisibilityBar
+- [ ] DraftPanel with scaffold generator
+- [ ] VoiceProfile sidebar
+- [ ] TrendsRail (basic — can be hardcoded with Gemini-summarized trends if time-tight)
 
-### Saturday evening: Polish
-- [ ] Brand voice refinement for Attio (make demos sound perfect)
-- [ ] Connection type badges, platform icons, score indicators
-- [ ] Loading states, error handling
-- [ ] Connect Aikido for side challenge
+### Saturday evening — polish
+- [ ] Brand voice tuning for Attio (make scaffolds genuinely Attio-sounding)
+- [ ] Loading states, badges, platform icons, score colors
+- [ ] Aikido side-challenge wiring
+- [ ] Run demo end-to-end on a clean state, time it
 
-### Sunday morning: Demo
-- [ ] Record 2-min video
-- [ ] README with setup, architecture, partner tech docs
-- [ ] Final testing
+### Sunday morning — demo
+- [ ] Record 2-min video as backup
+- [ ] README with setup, architecture, partner tech
+- [ ] Final pre-cache of Tavily results, sanity check
 
 ---
 
@@ -266,14 +320,16 @@ interface VoiceProfile {
 
 | Risk | Mitigation |
 |------|-----------|
-| Tavily can't find good LinkedIn posts | Pre-curate 5-10 LinkedIn examples. Lean on Reddit (fully crawlable) for live demo |
-| Gemini drafts sound generic | Invest in Brand Voice Profile quality. Include actual Attio phrases. Iterate prompts |
-| Non-obvious connections feel forced | Score threshold (60/100 minimum). Better 15 great cards than 50 mediocre |
-| Rate limits during demo | Pre-compute + cache results. Show curated AND live |
-| Peec AI OAuth broken | Already mitigated: use REST API with API key |
+| Tavily LinkedIn freshness flaky on stage | LinkedIn pre-cached; Reddit is the live demo platform |
+| Gemini scaffolds sound generic | Voice profile + Brand Context RAG as system-prompt anchor; few-shot with real Attio posts |
+| Quantitative Peec impact estimates feel made up | Use a transparent formula: lift = f(post reach × topic citation rate from `/reports/domains` × visibility gap). Show formula in tooltip. |
+| Live API call during demo fails | Cache layer. Even "live" calls have a cached fallback. |
+| Trends agent feels disconnected from Peec | Every trend output is anchored to a Peec topic ID with an expected lift number. No anchor, no surface. |
+| 24h build slips | Trends agent is the most cuttable. Conversation interception (the Radar) is the hero. Build in priority order. |
 
 ---
 
-## Name Decision
-Working name: **SWARM** — "3 marketers, swarming every conversation."
-Open to: LOUD, AMBUSH, FLARE, SURGE, or something else entirely. Decide during build.
+## Open Decisions
+- **Brand for demo**: Attio confirmed. Optional second brand (Nothing) as bonus only if time.
+- **Name**: SWARM. Locked.
+- **Visual identity**: matches Peec's design system (Geist, monochrome #171717 base, semantic accents). Positions us as a complement, not a competitor.

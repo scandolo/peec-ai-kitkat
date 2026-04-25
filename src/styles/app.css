@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Geist', 'Geist Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --color-fg-primary: #171717;
+  --color-fg-secondary: #17171799;
+  --color-fg-tertiary: #17171780;
+  --color-fg-quaternary: #17171766;
+
+  --color-bg-page: #fdfdfd;
+  --color-bg-subtle: #1717170a;
+  --color-bg-soft: #1717170f;
+  --color-bg-inverse: #171717;
+
+  --color-stroke: #17171714;
+  --color-stroke-soft: #1717170f;
+  --color-stroke-strong: #1717171f;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--peec-bg-white);
+  color: var(--peec-fg-primary);
+  font-family: var(--peec-font-sans);
+  font-feature-settings: 'cv11', 'ss01';
+  letter-spacing: -0.112px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  border-color: var(--peec-stroke-primary);
+}
+
+/* Typography helpers */
+.t-display { font-size: 28px; line-height: 28px; font-weight: 600; letter-spacing: -0.896px; }
+.t-h1 { font-size: 22px; line-height: 22px; font-weight: 600; letter-spacing: -0.616px; }
+.t-h2 { font-size: 18px; line-height: 18px; font-weight: 600; letter-spacing: -0.36px; }
+.t-h3 { font-size: 16px; line-height: 16px; font-weight: 600; letter-spacing: -0.128px; }
+.t-h4 { font-size: 14px; line-height: 14px; font-weight: 600; letter-spacing: -0.112px; }
+.t-body-l { font-size: 16px; line-height: 22px; font-weight: 500; letter-spacing: -0.128px; }
+.t-body-m { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.112px; }
+.t-body-s { font-size: 13px; line-height: 18px; font-weight: 500; letter-spacing: -0.065px; }
+.t-caption { font-size: 11px; line-height: 16px; font-weight: 500; letter-spacing: 0; }
+.t-mono { font-family: var(--peec-font-mono); font-size: 13px; line-height: 18px; }
+
+/* Card primitive — Peec-flavored 1px ring + subtle shadow */
+.peec-card {
+  background: var(--peec-bg-white);
+  border-radius: var(--peec-radius-lg);
+  box-shadow: var(--peec-shadow-xs);
+}
+
+.peec-card-lg {
+  background: var(--peec-bg-white);
+  border-radius: var(--peec-radius-xl);
+  box-shadow: var(--peec-shadow-sm);
+}
+
+/* Pill primitive */
+.peec-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--peec-radius-pill);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.065px;
+  background: var(--peec-bg-subtle, #1717170a);
+  border: 1px solid var(--peec-stroke-primary);
+}
+
+/* Button primitives */
+.peec-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--peec-radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.112px;
+  cursor: pointer;
+  transition: background-color 100ms ease;
+}
+
+.peec-btn-primary {
+  background: var(--peec-bg-black);
+  color: var(--peec-fg-primary-white);
+  box-shadow: var(--peec-shadow-btn-inverse);
+}
+
+.peec-btn-primary:hover { background: #2a2a2a; }
+
+.peec-btn-secondary {
+  background: var(--peec-bg-white);
+  color: var(--peec-fg-primary);
+  box-shadow: var(--peec-shadow-btn-primary);
+}
+
+.peec-btn-secondary:hover { background: var(--peec-table-hover); }
