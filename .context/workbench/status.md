@@ -13,6 +13,7 @@ Last updated: 2026-04-26 (orchestrator)
 | `agent-arch`        | this chat | orchestrator | all                                       | (merges others; resolves locks)  |
 | `backend-supabase`  | claude-bs | **MERGED** at 8af2a2b. Migrations applied via Supabase MCP, RLS on, tables empty pending seed. | full-plan.md, agents/backend-supabase.md      | (unblocks edge-functions, frontend-inbox)   |
 | `frontend-inbox`    | claude-fi | **MERGED** at 6c644d4. Sidebar + Inbox feed + TaskDrawer + router. Lovable will auto-deploy. | full-plan.md, peec-references/, agents/…      | (unblocks deploy-and-glue)       |
+| `visual-hero-strip` | claude-vh | **MERGED**. InboxHero strip (visibility + sparkline, queued lift, topic gap mini-bar, agent pulse) above the inbox. | full-plan.md, peec-references/, agents/visual-hero-strip.md | — |
 | `edge-functions`    | TBD       | pending  | full-plan.md (Edge fns section), schema       | deploy-and-glue                  |
 | `deploy-and-glue`   | TBD       | pending  | full-plan.md, all above                       | (final — auth + onboarding code only; Lovable handles deploy) |
 
