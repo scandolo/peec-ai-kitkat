@@ -92,7 +92,7 @@ export async function brandReportByTopic(brandId: string): Promise<
       body: JSON.stringify({
         project_id: PROJECT_ID,
         dimensions: ['topic_id'],
-        filters: { brand_id: { in: [brandId] } },
+        filters: [{ field: 'brand_id', operator: 'in', values: [brandId] }],
         order_by: [{ field: 'visibility', direction: 'desc' }],
       }),
     },
@@ -124,7 +124,7 @@ export async function topCitedDomains(): Promise<PeecDomainReportRow[]> {
     method: 'POST',
     body: JSON.stringify({
       project_id: PROJECT_ID,
-      dimensions: ['domain'],
+      dimensions: [],
       order_by: [{ field: 'citation_count', direction: 'desc' }],
       limit: 20,
     }),

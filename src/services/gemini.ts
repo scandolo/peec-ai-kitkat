@@ -17,26 +17,33 @@ interface GeminiPart { text: string }
 interface GeminiContent { role?: 'user' | 'model'; parts: GeminiPart[] }
 interface GeminiResponse { candidates?: Array<{ content: GeminiContent }> }
 
-async function generate(prompt: string, system?: string): Promise<string> {
-  if (!API_KEY) throw new Error('VITE_GEMINI_API_KEY not set');
-  const body = {
-    contents: [{ role: 'user' as const, parts: [{ text: prompt }] }],
-    ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
-    generationConfig: { responseMimeType: 'application/json', temperature: 0.5 },
-  };
-  const res = await fetch(`${GEMINI_BASE}/models/${MODEL}:generateContent?key=${API_KEY}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`gemini ${res.status}: ${await res.text()}`);
-  const data = (await res.json()) as GeminiResponse;
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('gemini empty response');
-  return text;
+async function generate(prompt: string, system?: string): Promise<string | null> {
+  if (!API_KEY) return null;
+  try {
+    const body = {
+      contents: [{ role: 'user' as const, parts: [{ text: prompt }] }],
+      ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
+      generationConfig: { responseMimeType: 'application/json', temperature: 0.5 },
+    };
+    const res = await fetch(`${GEMINI_BASE}/models/${MODEL}:generateContent?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      console.warn(`gemini ${res.status} — falling back`);
+      return null;
+    }
+    const data = (await res.json()) as GeminiResponse;
+    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
+  } catch (err) {
+    console.warn('gemini threw — falling back', err);
+    return null;
+  }
 }
 
-function parseJson<T>(text: string, fallback: T): T {
+function parseJson<T>(text: string | null, fallback: T): T {
+  if (!text) return fallback;
   try {
     const cleaned = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
     return JSON.parse(cleaned) as T;

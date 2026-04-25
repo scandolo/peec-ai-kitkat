@@ -67,8 +67,17 @@ export async function buildRadar(opts: { brandId?: string } = {}): Promise<Radar
     'week',
   );
 
+  // Dedupe by URL — multiple queries can surface the same post.
+  // Keep the highest-scoring instance and remember its query/platform context.
+  const byUrl = new Map<string, (typeof tavilyResults)[number]>();
+  for (const r of tavilyResults) {
+    const existing = byUrl.get(r.url);
+    if (!existing || (r.score ?? 0) > (existing.score ?? 0)) byUrl.set(r.url, r);
+  }
+  const deduped = [...byUrl.values()];
+
   const queryById = new Map(queries.map((q) => [q.query, q]));
-  const enriched = tavilyResults.map((r) => {
+  const enriched = deduped.map((r) => {
     const q = queryById.get(r.query);
     const gap = gaps.find((g) => g.topicId === q?.topicId) ?? sortedGaps[0];
     return {
@@ -85,7 +94,8 @@ export async function buildRadar(opts: { brandId?: string } = {}): Promise<Radar
   const opportunities: ConversationOpportunity[] = enriched
     .map((r) => {
       const s = scoredByUrl.get(r.url);
-      const id = btoa(r.url).slice(0, 16);
+      const q = queryById.get(r.query);
+      const id = btoa(r.url).slice(0, 24);
       return {
         id,
         platform: r.platform,
@@ -95,10 +105,15 @@ export async function buildRadar(opts: { brandId?: string } = {}): Promise<Radar
         author: extractAuthor(r),
         publishedAt: r.published_date ?? new Date().toISOString(),
         relevanceScore: s?.relevanceScore ?? Math.round((r.score ?? 0.7) * 100),
-        connectionType: s?.connectionType ?? 'direct',
+        // Prefer the query's intended connection type — it's tagged at query gen time
+        connectionType: q?.connectionType ?? s?.connectionType ?? 'direct',
         relatedTopicId: r.topicId,
-        peecInsight: s?.peecInsight ?? `Engaging here connects to "${r.topicName}".`,
-        estimatedVisibilityLift: s?.estimatedVisibilityLift ?? 1.5,
+        peecInsight:
+          s?.peecInsight ??
+          `You are invisible for "${r.topicName}" (${r.topicVisibility}%). This ${r.platform} post directly relates.`,
+        estimatedVisibilityLift:
+          s?.estimatedVisibilityLift ??
+          Number(((100 - r.topicVisibility) * ((s?.relevanceScore ?? 75) / 100) * 0.04).toFixed(1)),
       };
     })
     .filter((o) => o.relevanceScore >= 60)

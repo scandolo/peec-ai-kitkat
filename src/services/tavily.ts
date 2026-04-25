@@ -1,7 +1,7 @@
 import { cacheKey, withCache } from './cache';
 import type { Platform } from '../types';
 
-const TAVILY_BASE = 'https://api.tavily.com';
+const TAVILY_BASE = '/_tavily'; // Vite proxy → https://api.tavily.com
 const API_KEY = import.meta.env.VITE_TAVILY_API_KEY as string | undefined;
 
 export interface TavilyResult {
@@ -120,6 +120,30 @@ const MOCK_POOL: Record<Platform, TavilyResult[]> = {
       score: 0.83,
       published_date: '2026-04-23T11:00:00Z',
     },
+    {
+      url: 'https://www.reddit.com/r/B2BSaaS/comments/1mno345/scaling_chaos_50_to_150_people/',
+      title: 'Scaling chaos — going from 50 to 150 people',
+      content:
+        "Hit 50 last quarter, hiring 100 more this year. Every system that worked at 20 is breaking. CRM, ATS, comp, you name it. What survives the 100-person threshold?",
+      score: 0.81,
+      published_date: '2026-04-19T16:30:00Z',
+    },
+    {
+      url: 'https://www.reddit.com/r/founders/comments/1pqr678/just_raised_seed_dont_buy_salesforce/',
+      title: "Just raised seed — please don't buy Salesforce",
+      content:
+        "Watching another founder friend get sold a $50k Salesforce contract. They have 8 customers. Why does this keep happening?",
+      score: 0.86,
+      published_date: '2026-04-22T08:00:00Z',
+    },
+    {
+      url: 'https://www.reddit.com/r/startups/comments/1stu901/ai_writes_my_crm_updates_now/',
+      title: 'AI writes my CRM updates now — sharing the workflow',
+      content:
+        "Spent 3 weeks building this. Every meeting transcribed, every email parsed, CRM auto-fills. Saving ~7 hours/week per rep. Happy to share details.",
+      score: 0.79,
+      published_date: '2026-04-23T19:00:00Z',
+    },
   ],
   linkedin: [
     {
@@ -146,6 +170,22 @@ const MOCK_POOL: Record<Platform, TavilyResult[]> = {
       score: 0.87,
       published_date: '2026-04-22T17:00:00Z',
     },
+    {
+      url: 'https://www.linkedin.com/posts/series-a-founder_just-closed-our-12m-series-a-10-things-activity-7401000000000000000-bbbb',
+      title: 'Just closed our $12M Series A. 10 things I wish I had known.',
+      content:
+        "1. Hire ops before sales. 2. Pick a CRM you can change in a week. 3. Don't sign a 3-year SaaS contract before PMF. 4. Your first RevOps hire is a force multiplier...",
+      score: 0.9,
+      published_date: '2026-04-20T11:00:00Z',
+    },
+    {
+      url: 'https://www.linkedin.com/posts/saas-vc_the-end-of-the-crm-monolith-activity-7402000000000000000-cccc',
+      title: 'The end of the CRM monolith',
+      content:
+        "Three founders this month told me their CRM is the worst tool in their stack. Not because of features — because it's a different design language than the rest of their software. Aesthetic is a buying signal now.",
+      score: 0.84,
+      published_date: '2026-04-21T14:00:00Z',
+    },
   ],
   x: [
     {
@@ -163,6 +203,22 @@ const MOCK_POOL: Record<Platform, TavilyResult[]> = {
         "POV: it's 2026 and you're manually copy-pasting contacts between 4 apps because your CRM was built in 2008.",
       score: 0.84,
       published_date: '2026-04-21T13:00:00Z',
+    },
+    {
+      url: 'https://x.com/builder/status/1782000000000000000',
+      title: 'Spent 4 hours setting up Salesforce. Still not working.',
+      content:
+        "Spent 4 hours setting up Salesforce. Still not working. Spent 12 minutes setting up Attio. Already shipping. The future is in modern tools.",
+      score: 0.86,
+      published_date: '2026-04-23T07:45:00Z',
+    },
+    {
+      url: 'https://x.com/revops/status/1783000000000000000',
+      title: 'AI agents are eating the SDR job',
+      content:
+        "AI agents are eating the SDR job and the CRM is the integration point. Whoever wins the modern, API-first CRM wins the next decade of B2B sales.",
+      score: 0.82,
+      published_date: '2026-04-19T22:00:00Z',
     },
   ],
 };
